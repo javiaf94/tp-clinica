@@ -1,5 +1,8 @@
 <div class="wrapper">
     <div class="signup-section">
+
+        <app-spinner [loading]="loading"></app-spinner>
+
         <h1>Iniciar sesión</h1>
 
         <form [formGroup]="form" (ngSubmit)="onLogin()">

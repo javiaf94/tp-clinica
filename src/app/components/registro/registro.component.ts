@@ -7,11 +7,12 @@ import { Firestore, addDoc, collection,getDocs, query, where } from '@angular/fi
 import { ref, uploadString, getDownloadURL, getStorage } from 'firebase/storage';
 import { Storage } from '@angular/fire/storage';
 import Swal from 'sweetalert2';
+import { SpinnerComponent } from '../spinner/spinner.component';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, SpinnerComponent],
   templateUrl: './registro.component.html',
   styleUrl: './registro.component.scss'
 })
@@ -24,6 +25,7 @@ export class RegistroComponent {
   imagenesInvalid: boolean = false; // Para validar las imágenes
   imagenesInvalidEspecialista: boolean = false; // Para validar las imágenes
 
+  loading: boolean = false;
 
   usuarioForm!: FormGroup;
   especialistaForm!: FormGroup;
@@ -167,6 +169,8 @@ export class RegistroComponent {
 
   async onSubmit()
   {
+    this.loading = true; // Activa el spinner
+
     const nombre = this.usuarioForm.get('nombre')?.value;
     const apellido = this.usuarioForm.get('apellido')?.value;      
     const dni = this.usuarioForm.get('dni')?.value;      
@@ -213,6 +217,7 @@ export class RegistroComponent {
         heightAuto: false
       });    
       this.router.navigate(['login']);
+      this.loading = false;
     }
     catch(e)
     {
@@ -222,11 +227,16 @@ export class RegistroComponent {
         confirmButtonColor: '#4CAF50',
         background: '#f2f2f2',
         heightAuto: false
-      })      }      
+      })     
+      this.loading = false; // Activa el spinner
+
+     }      
    }
 
   async onSubmitEspecialista()
   {
+    this.loading = true; // Activa el spinner
+
     const nombre = this.especialistaForm.get('nombre')?.value;
     const apellido = this.especialistaForm.get('apellido')?.value;      
     const dni = this.especialistaForm.get('dni')?.value;      
@@ -271,6 +281,8 @@ export class RegistroComponent {
         background: '#f2f2f2',
         heightAuto: false
       });    
+      this.loading = false; // Activa el spinner
+
       this.router.navigate(['login']);
     }
     catch(e)
@@ -282,6 +294,8 @@ export class RegistroComponent {
         background: '#f2f2f2',
         heightAuto: false
       })  
+      this.loading = false; // Activa el spinner
+
     }  
     }
 

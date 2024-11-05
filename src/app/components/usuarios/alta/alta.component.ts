@@ -7,12 +7,13 @@ import { Firestore, addDoc, collection,getDocs, query, where } from '@angular/fi
 import { ref, uploadString, getDownloadURL, getStorage } from 'firebase/storage';
 import { Storage } from '@angular/fire/storage';
 import Swal from 'sweetalert2';
+import { SpinnerComponent } from '../../spinner/spinner.component';
 
 
 @Component({
   selector: 'app-alta',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, SpinnerComponent],
   templateUrl: './alta.component.html',
   styleUrl: './alta.component.scss'
 })
@@ -30,6 +31,9 @@ export class AltaComponent {
   especialistaForm!: FormGroup;
   adminForm!: FormGroup;
 
+  loading: boolean = false;
+
+  
 
   constructor( private firestore: Firestore,  private router: Router, private authService: AuthService, private fb: FormBuilder, private storage: Storage)
   {
@@ -192,6 +196,7 @@ export class AltaComponent {
 
   async onSubmit()
   {
+    this.loading = true;
     const nombre = this.usuarioForm.get('nombre')?.value;
     const apellido = this.usuarioForm.get('apellido')?.value;      
     const dni = this.usuarioForm.get('dni')?.value;      
@@ -238,6 +243,7 @@ export class AltaComponent {
         heightAuto: false
       });    
       this.router.navigate(['login']);
+      this.loading = false;
     }
     catch(e)
     {
@@ -247,11 +253,14 @@ export class AltaComponent {
         confirmButtonColor: '#4CAF50',
         background: '#f2f2f2',
         heightAuto: false
-      })      }      
+      })    
+      this.loading = false;
+    }      
    }
 
   async onSubmitEspecialista()
   {
+    this.loading = true;
     const nombre = this.especialistaForm.get('nombre')?.value;
     const apellido = this.especialistaForm.get('apellido')?.value;      
     const dni = this.especialistaForm.get('dni')?.value;      
@@ -295,6 +304,7 @@ export class AltaComponent {
         background: '#f2f2f2',
         heightAuto: false
       });    
+      this.loading = false;
       this.router.navigate(['login']);
     }
     catch(e)
@@ -306,6 +316,7 @@ export class AltaComponent {
         background: '#f2f2f2',
         heightAuto: false
       })  
+      this.loading = false;
     }  
     }
 
@@ -322,6 +333,7 @@ export class AltaComponent {
 
   async onSubmitAdministrador()
   {
+    this.loading = true;
     const nombre = this.adminForm.get('nombre')?.value;
     const apellido = this.adminForm.get('apellido')?.value;      
     const dni = this.adminForm.get('dni')?.value;      
@@ -348,7 +360,7 @@ export class AltaComponent {
         apellido: apellido,
         edad: edad, // Asignamos la imagen
         foto1: imageURL1,
-        tipo: 'administrador',
+        tipo: 'admin',
         estado: ''
       });
       Swal.fire( { title: 'Usuario creado',
@@ -358,6 +370,7 @@ export class AltaComponent {
         background: '#f2f2f2',
         heightAuto: false
       });    
+      this.loading = false;
       this.router.navigate(['login']);
     }
     catch(e)
@@ -369,6 +382,7 @@ export class AltaComponent {
         background: '#f2f2f2',
         heightAuto: false
       })  
+      this.loading = false;
     }  
   }
 }

@@ -5,11 +5,12 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
 import { Firestore, collection, query, where, getDocs} from '@angular/fire/firestore';
+import { SpinnerComponent } from '../spinner/spinner.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, SpinnerComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -20,6 +21,8 @@ export class LoginComponent {
   email2: string = 'especialista@prueba.com';
   email3: string = 'administrador@prueba.com';
   password: string = 'test123';
+
+  loading: boolean = false;
 
   constructor(private fb:FormBuilder, private router: Router, private auth:AuthService, private firestore: Firestore)
   {
@@ -36,6 +39,7 @@ export class LoginComponent {
 
   async onLogin()
   {
+    this.loading = true;
     try
     {
       let user = await this.auth.login(this.form.get('email')?.value, this.form.get('contraseña')?.value);
@@ -78,7 +82,7 @@ export class LoginComponent {
         default:
           this.router.navigate(['perfil']);
       }
-
+      this.loading = false;
     }
     catch(e)
     {
@@ -93,6 +97,7 @@ export class LoginComponent {
               background: '#f2f2f2',
               heightAuto: false
             }); 
+            this.loading = false;
           }
           else
           {
@@ -103,6 +108,7 @@ export class LoginComponent {
               background: '#f2f2f2',
               heightAuto: false
             }); 
+            this.loading = false;
             }
           }
     }
@@ -113,10 +119,6 @@ export class LoginComponent {
     this.router.navigate(['registro']);
   }
 
-  onSubmit()
-  {
-
-  }
 
   completarAccesoRapido(email:string, password:string)
   {
