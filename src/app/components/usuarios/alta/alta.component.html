@@ -1,0 +1,235 @@
+<label for="userType">Tipo de usuario:</label>
+<select id="userType" (change)="onUserTypeChange($event)" style="margin-left: 4px; font-size:medium;">
+  <option value="administrador">Administrador</option>
+  <option value="especialista">Especialista</option>
+  <option value="paciente">Paciente</option>
+</select>
+
+<form [formGroup]="especialistaForm" (ngSubmit)="onSubmitEspecialista()" *ngIf="selectedUserType=='especialista' ">
+    <div class="form-grid">
+        <div class="left-column">
+            <div class="form-group">
+                <label for="nombre">Nombre/s:</label>
+                <input type="text" id="nombre" name="nombre" formControlName="nombre" required>
+                <div *ngIf="especialistaForm.get('nombre')?.invalid && (especialistaForm.get('nombre')?.touched || especialistaForm.get('nombre')?.dirty)" class="error">
+                    Se requiere un nombre válido.
+                  </div>
+            </div>
+            <div class="form-group">
+                <label for="apellido">Apellido:</label>
+                <input type="text" id="apellido" name="apellido"  formControlName="apellido" required>
+                <div *ngIf="especialistaForm.get('apellido')?.invalid && (especialistaForm.get('apellido')?.touched || especialistaForm.get('apellido')?.dirty)" class="error">
+                    Se requiere un apellido válido.
+                  </div>
+            </div>
+            <div class="form-group">
+                <label for="edad">Edad:</label>
+                <input type="number" id="edad" name="edad" formControlName="edad" required>
+                <div *ngIf="especialistaForm.get('edad')?.invalid && (especialistaForm.get('edad')?.touched || especialistaForm.get('edad')?.dirty)" class="error">
+                    Ingrese una edad valida (mayor a 21 y menor a 125 años).
+                  </div>
+            </div>
+            <div class="form-group">
+                <label for="dni">DNI:</label>
+                <input type="text" id="dni" name="dni" formControlName="dni" required>
+                <div *ngIf="especialistaForm.get('dni')?.invalid && (especialistaForm.get('dni')?.touched || especialistaForm.get('dni')?.dirty)" class="error">
+                    El documento es requerido y debe ser numérico (8 caracteres).
+                  </div>
+            </div>
+        </div>
+
+        <div class="right-column">                    
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" formControlName="email" required>
+                <div *ngIf="especialistaForm.get('email')?.invalid && especialistaForm.get('email')?.touched" class="error">
+                    <p *ngIf="especialistaForm.get('email')?.errors?.['required']">El correo es requerido.</p>
+                    <p *ngIf="especialistaForm.get('email')?.errors?.['email']">El formato del correo no es válido.</p>
+                  </div>
+            </div>
+            <div class="form-group">
+                <label for="contraseña">Contraseña:</label>
+                <input type="password" id="contraseña" name="contraseña" formControlName="contraseña" required>
+                <div *ngIf="especialistaForm.get('contraseña')?.invalid && (especialistaForm.get('contraseña')?.touched || especialistaForm.get('contraseña')?.dirty)" class="error">
+                    La contraseña es requerida y debe tener mínimo 6 caracteres.
+                  </div>
+            </div>
+            <div class="especialidad-form-group" id="especialidad">
+                <label for="especialidad">Especialidad:</label>
+                <label>
+                    <input type="checkbox" value="Pediatria" (change)="onCheckboxChange('Pediatria')" />Pediatria
+                </label>
+                <label>
+                    <input type="checkbox" value="Oftalmologia" (change)="onCheckboxChange('Oftalmologia')" />Oftalmologia
+                </label>
+                <label>
+                    <input type="checkbox" value="Cardiologia"  (change)="onCheckboxChange('Cardiologia')"/>Cardiologia
+                </label>
+                <label>
+                    <input type="checkbox" value="Cirugia" (change)="onCheckboxChange('Cirugia')" />Cirugia
+                </label>
+                <label>
+                    <input type="checkbox" value="General" (change)="onCheckboxChange('General')" />General
+                </label>
+                <label>
+                    <input type="checkbox" value="Otra"  (change)="onCheckboxChange('Otra')"/>Otra
+                </label>
+                <div *ngIf="especialistaForm.get('especialidad')?.invalid">
+                    <small class="error">Debe seleccionar al menos una opción.</small>
+                  </div>
+            </div>
+            <div class="form-group" style="margin-top: 42px;" *ngIf="this.otra">
+                <label for="especialidadadicional">Especialidad adicional:</label>
+                <input type="text" id="especialidadadicional" name="especialidadadicional" formControlName="especialidadadicional">
+                <div *ngIf="especialistaForm.get('especialidadadicional')?.invalid && (especialistaForm.get('especialidadadicional')?.touched || especialistaForm.get('especialidadadicional')?.dirty)" class="error">
+                    Ingrese una especialidad válida.
+                  </div>
+            </div>
+            <div class="form-group">
+                <label for="imagenes">Subir imágen de perfil:</label>
+                <input type="file" id="imagenes" name="imagenes" (change)="onFileChange($event)" accept="image/*"  required>
+                <div *ngIf="imagenesInvalidEspecialista" class="error">
+                    Debe seleccionar exactamente 1 imágen.
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="button-container">
+        <button type="submit" class="submit-btn" [disabled]="especialistaForm.invalid">Crear Cuenta</button>
+    </div>
+</form>
+
+<!-- Similar structure can be applied for the non-especialista form -->
+<form  [formGroup]="usuarioForm" (ngSubmit)="onSubmit()" *ngIf="this.selectedUserType =='paciente' ">
+    <div class="form-grid">
+        <div class="left-column">
+            <div class="form-group">
+                <label for="nombre">Nombre/s:</label>
+                <input type="text" id="nombre" name="nombre" formControlName="nombre" required>
+                <div *ngIf="usuarioForm.get('nombre')?.invalid && (usuarioForm.get('nombre')?.touched || usuarioForm.get('nombre')?.dirty)" class="error">
+                    Se requiere un nombre válido.
+                  </div>
+            </div>
+            <div class="form-group">
+                <label for="apellido">Apellido:</label>
+                <input type="text" id="apellido" name="apellido" formControlName="apellido" required>
+                <div *ngIf="usuarioForm.get('apellido')?.invalid && (usuarioForm.get('apellido')?.touched || usuarioForm.get('apellido')?.dirty)" class="error">
+                    Se requiere un apellido válido.
+                  </div>
+            </div>
+            <div class="form-group">
+                <label for="edad">Edad:</label>
+                <input type="number" id="edad" name="edad" formControlName="edad" required>
+                <div *ngIf="usuarioForm.get('edad')?.invalid && (usuarioForm.get('edad')?.touched || usuarioForm.get('edad')?.dirty)" class="error">
+                    Ingrese una edad valida (menor a 125 años).
+                  </div>
+            </div>
+            <div class="form-group">
+                <label for="dni">DNI:</label>
+                <input type="text" id="dni" name="dni" formControlName="dni" required>
+                <div *ngIf="usuarioForm.get('dni')?.invalid && (usuarioForm.get('dni')?.touched || usuarioForm.get('dni')?.dirty)" class="error">
+                    El documento es requerido y debe ser numérico (8 caracteres).
+                  </div>
+            </div>
+        </div>
+
+        <div class="right-column">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" formControlName="email" required>
+                <div *ngIf="usuarioForm.get('email')?.invalid && usuarioForm.get('email')?.touched" class="error">
+                    <p *ngIf="usuarioForm.get('email')?.errors?.['required']">El correo es requerido.</p>
+                    <p *ngIf="usuarioForm.get('email')?.errors?.['email']">El formato del correo no es válido.</p>
+                  </div>
+            </div>
+            <div class="form-group">
+                <label for="contraseña">Contraseña:</label>
+                <input type="password" id="contraseña" name="contraseña"  formControlName="contraseña" required>
+                <div *ngIf="usuarioForm.get('contraseña')?.invalid && (usuarioForm.get('contraseña')?.touched || usuarioForm.get('contraseña')?.dirty)" class="error">
+                    La contraseña es requerida y debe tener mínimo 6 caracteres.
+                  </div>
+            </div>
+            <div class="form-group">
+                <label for="obrasocial">Obra Social:</label>
+                <input type="text" id="obrasocial" name="obrasocial" formControlName="obrasocial" required>
+                <div *ngIf="usuarioForm.get('obrasocial')?.invalid && (usuarioForm.get('obrasocial')?.touched || usuarioForm.get('obrasocial')?.dirty)" class="error">
+                    Ingrese una obra social válida.
+                  </div>
+            </div>
+
+            <div class="form-group">
+                <label for="imagenes" >Subir imágenes (debe seleccionar 2): </label>
+                <input type="file" id="imagenes" name="imagenes" (change)="onFileChange($event)" accept="image/*" multiple required>
+                <div  *ngIf="imagenesInvalid" class="error">
+                    Debe seleccionar exactamente 2 imágenes.
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="button-container">
+        <button type="submit" class="submit-btn" [disabled]="usuarioForm.invalid">Crear Cuenta</button>
+    </div>
+</form>
+
+<form [formGroup]="adminForm" (ngSubmit)="onSubmitAdministrador()" *ngIf="selectedUserType=='administrador' ">
+    <div class="form-grid">
+        <div class="left-column">
+            <div class="form-group">
+                <label for="nombre">Nombre/s:</label>
+                <input type="text" id="nombre" name="nombre" formControlName="nombre" required>
+                <div *ngIf="adminForm.get('nombre')?.invalid && (adminForm.get('nombre')?.touched || adminForm.get('nombre')?.dirty)" class="error">
+                    Se requiere un nombre válido.
+                  </div>
+            </div>
+            <div class="form-group">
+                <label for="apellido">Apellido:</label>
+                <input type="text" id="apellido" name="apellido"  formControlName="apellido" required>
+                <div *ngIf="adminForm.get('apellido')?.invalid && (adminForm.get('apellido')?.touched || adminForm.get('apellido')?.dirty)" class="error">
+                    Se requiere un apellido válido.
+                  </div>
+            </div>
+            <div class="form-group">
+                <label for="edad">Edad:</label>
+                <input type="number" id="edad" name="edad" formControlName="edad" required>
+                <div *ngIf="adminForm.get('edad')?.invalid && (adminForm.get('edad')?.touched || adminForm.get('edad')?.dirty)" class="error">
+                    Ingrese una edad valida (mayor a 21 y menor a 125 años).
+                  </div>
+            </div>
+            <div class="form-group">
+                <label for="dni">DNI:</label>
+                <input type="text" id="dni" name="dni" formControlName="dni" required>
+                <div *ngIf="adminForm.get('dni')?.invalid && (adminForm.get('dni')?.touched || adminForm.get('dni')?.dirty)" class="error">
+                    El documento es requerido y debe ser numérico (8 caracteres).
+                  </div>
+            </div>
+        </div>
+
+        <div class="right-column">                    
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" formControlName="email" required>
+                <div *ngIf="adminForm.get('email')?.invalid && adminForm.get('email')?.touched" class="error">
+                    <p *ngIf="adminForm.get('email')?.errors?.['required']">El correo es requerido.</p>
+                    <p *ngIf="adminForm.get('email')?.errors?.['email']">El formato del correo no es válido.</p>
+                  </div>
+            </div>
+            <div class="form-group">
+                <label for="contraseña">Contraseña:</label>
+                <input type="password" id="contraseña" name="contraseña" formControlName="contraseña" required>
+                <div *ngIf="adminForm.get('contraseña')?.invalid && (adminForm.get('contraseña')?.touched || adminForm.get('contraseña')?.dirty)" class="error">
+                    La contraseña es requerida y debe tener mínimo 6 caracteres.
+                  </div>
+            </div>
+            <div class="form-group">
+                <label for="imagenes">Subir imágen de perfil:</label>
+                <input type="file" id="imagenes" name="imagenes" (change)="onFileChange($event)" accept="image/*"  required>
+                <div *ngIf="imagenesInvalidEspecialista" class="error">
+                    Debe seleccionar exactamente 1 imágen.
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="button-container">
+        <button type="submit" class="submit-btn" [disabled]="adminForm.invalid">Crear Cuenta</button>
+    </div>
+</form>

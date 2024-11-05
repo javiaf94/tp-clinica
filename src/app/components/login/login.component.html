@@ -1,0 +1,43 @@
+<div class="wrapper">
+    <div class="signup-section">
+        <h1>Iniciar sesión</h1>
+
+        <form [formGroup]="form" (ngSubmit)="onLogin()">
+            <div class="form-grid">                     
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" formControlName="email" required>
+                <div *ngIf="form.get('email')?.invalid && form.get('email')?.touched" class="error">
+                    <p *ngIf="form.get('email')?.errors?.['required']">Ingrese su correo.</p>
+                    <p *ngIf="form.get('email')?.errors?.['email']">El formato del correo no es válido.</p>
+                    </div>
+            </div>
+            <div class="form-group">
+                <label for="contraseña">Contraseña:</label>
+                <input type="password" id="contraseña" name="contraseña" formControlName="contraseña" required>
+                <div *ngIf="form.get('contraseña')?.invalid && (form.get('contraseña')?.touched || form.get('contraseña')?.dirty)" class="error">
+                    <p *ngIf="form.get('contraseña')?.errors?.['required']">Ingrese su contraseña.</p>
+                    <p *ngIf="form.get('contraseña')?.errors?.['minlength']">La contraseña es muy corta.</p>                   
+                </div>
+            </div>                   
+            </div>
+            <div class="button-container">
+                <button type="submit" class="submit-btn" [disabled]="form.invalid">Iniciar sesión</button>
+            </div>
+
+        </form>  
+
+        <div class="quick-login-section">
+            <h3>Inicio de sesión rápido</h3>
+            <div class="quick-login-buttons">
+                <button class="quick-login-btn paciente" (click)="completarAccesoRapido(email1, password)">Completar datos paciente</button>
+                <button class="quick-login-btn especialista" (click)="completarAccesoRapido(email2, password)">Completar datos especialista</button>
+                <button class="quick-login-btn administrador" (click)="completarAccesoRapido(email3, password)">Completar datos administrador</button>
+            </div>
+        </div>
+
+        <div class="a-container">
+            No posees una cuenta aún?   <a (click)="goToRegister()" class="login-link"> Registrarse</a>
+        </div>
+    </div>
+</div>

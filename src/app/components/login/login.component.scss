@@ -1,0 +1,164 @@
+/* Estilos para el contenedor de fondo del formulario */
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 92.3vh;
+    width: 100vw;
+    background-color: #292952;
+    background-image: url('../../../../public/background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Sección de registro */
+.signup-section {
+    background-color: #e6edf7;
+    padding: 20px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 40%; /* Ajusta el ancho para que no sea demasiado grande */
+    min-width: 300px; /* Define un ancho mínimo */
+    max-width: 600px; /* Define un ancho máximo */
+}
+
+/* Títulos y textos */
+.signup-section h1 {
+    font-size: 2em;
+    color: #686868;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Estilos para la cuadrícula del formulario */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Haz que ocupe una sola columna */
+    gap: 20px; /* Reduce el espacio entre elementos */
+}
+
+/* Estilos para los campos */
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-size: 1em;
+    color: #666666;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #718199;
+    border-radius: 5px;
+    font-size: 15px;
+    background-color: #edf4ff;
+}
+
+/* Estilo del botón de registro */
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.a-container {
+    margin-top: 8px;
+    display: flex;
+    justify-content: center;
+    color: #686868;
+}
+
+.login-link {
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: underline;
+    margin-left: 2px;
+}
+
+.login-link:hover {
+    text-decoration: none;
+}
+
+/* Botón de enviar */
+.submit-btn {
+    padding: 10px 20px;
+    font-size: 1.4em;
+    border: none;
+    border-radius: 5px;
+    background-color: #3262ff;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: auto;
+    margin-top: 10px;
+}
+
+.submit-btn:disabled {
+    background-color: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+}
+
+.submit-btn:hover {
+    background-color: #134aff;
+}
+
+/* Estilos para mensajes de error */
+.error {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+/* Estilos para la sección de inicio de sesión rápido */
+.quick-login-section {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.quick-login-section h3 {
+    font-size: 1.5em;
+    color: #686868;
+    margin-bottom: 15px;
+}
+
+/* Contenedor para los botones */
+.quick-login-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+/* Estilos generales para los botones de inicio de sesión rápido */
+.quick-login-btn {
+    padding: 10px 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    color: #ffffff;
+}
+
+/* Colores específicos para cada botón */
+.paciente {
+    background-color: #db4437; /* Rojo de Google */
+}
+
+.especialista {
+    background-color: #4267B2; /* Azul de Facebook */
+}
+
+.administrador {
+    background-color: #1DA1F2; /* Azul de Twitter */
+}
+
+/* Hover para los botones de inicio de sesión rápido */
+.quick-login-btn:hover {
+    opacity: 0.9;
+}

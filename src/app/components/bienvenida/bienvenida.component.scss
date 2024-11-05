@@ -1,0 +1,85 @@
+/* Estilos para el contenedor de fondo */
+.wrapper {
+    display: flex;
+    justify-content: flex-start; /* Alinea los elementos al inicio (izquierda) */
+    align-items: center; /* Centra verticalmente */
+    height: 92.3vh; /* Ocupa toda la pantalla verticalmente */
+    width: 100vw; /* Ocupa toda la pantalla horizontalmente */
+    background-color: #292952; /* Color de fondo si la imagen no carga */
+    background-image: url('../../../../public/background.jpg'); /* Imagen de fondo */
+    background-size: cover; /* Ajusta la imagen de fondo para cubrir el área */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que se repita */
+    overflow: hidden; /* Evita el scroll si hay contenido extra */
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden; /* Evita el scroll si hay contenido extra */
+}
+
+/* Sección de bienvenida (lado izquierdo) */
+.welcome-section {
+    flex: 1; /* Ocupa el 100% del ancho del contenedor */
+    display: flex;
+    flex-direction: column; /* Organiza elementos en columna */
+    justify-content: center; /* Centra verticalmente el contenido */
+    align-items: flex-start; /* Alinea los elementos al inicio (izquierda) */
+    padding: 40px; /* Espaciado interno */
+    text-align: left; /* Alinea el texto a la izquierda */
+    margin-top: -120px; /* Ajusta el margen superior para elevar la sección */
+    margin-left: 20px
+
+}
+
+.welcome-section h1 {
+    font-size: 3.2em;
+    color: #333333;
+    margin-bottom: 20px;
+    max-width: 45%; /* Limita el ancho del texto */
+
+}
+
+.welcome-section p {
+    font-size: 1.9em;
+    color: #666666;
+    margin-bottom: 30px;
+    max-width: 40%; /* Limita el ancho del texto */
+}
+
+/* Botones de registro e inicio de sesión */
+.buttons {
+    margin-top: 7px;
+    display: flex;
+    gap: 50px; /* Espacio entre botones */
+}
+
+.register-btn, .login-btn {
+    padding: 10px 20px;
+    font-size: 2.1em;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.register-btn {
+    background-color: #3262ff; /* Verde para registro */
+    color: #ffffff;
+}
+
+.register-btn:hover {
+    background-color: #134aff;
+}
+
+.login-btn {
+    background-color: #3262ff; /* Azul para login */
+    color: #ffffff;
+}
+
+.login-btn:hover {
+    background-color: #134aff;
+}

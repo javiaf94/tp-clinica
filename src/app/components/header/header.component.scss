@@ -1,0 +1,81 @@
+/* Aplica estilo general al header */
+nav a.active-route {
+    font-weight: bold;
+  }
+  
+  header {
+    /*background-color: #ffffff; /* Blanco o cualquier color suave */
+    padding: 0 30px; /* Margen horizontal */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para darle elegancia */
+    top: 0;
+    position: sticky;
+    z-index: 1000;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center; /* Centra verticalmente los elementos dentro del header */
+    min-height: 70px; /* Define una altura mínima para el header */
+    background-color: rgb(255, 255, 255);
+    border-radius: 15px; /* Suaviza los bordes */
+  }
+  
+  /* Estilos para el nav */
+  nav {
+    display: flex;
+    align-items: center; /* Asegura que los elementos del nav estén centrados verticalmente */
+    height: 100%; /* Asegura que el nav ocupe el 100% de la altura del header */
+  }
+  
+  nav ul {
+    display: flex; /* Hace que los enlaces se alineen horizontalmente */
+    align-items: center; /* Asegura que los items en la lista se alineen verticalmente */
+    list-style-type: none; /* Quita los puntos de la lista */
+    margin: 0;
+    padding: 0;
+    margin-left: auto; /* Empuja los elementos hacia el margen derecho */
+    height: 100%; /* Asegura que el ul ocupe el 100% de la altura del nav */
+  }
+  
+  nav ul li {
+    margin-right: 20px; /* Espaciado entre los enlaces */
+    display: flex;
+    align-items: center; /* Alinea el contenido dentro del li verticalmente */
+    height: 100%; /* Asegura que los li ocupen el 100% de la altura del ul */
+  }
+  
+  nav ul li:last-child {
+    margin-right: 0; /* Quita el margen del último elemento */
+  }
+  
+  /* Estilos para los enlaces */
+  nav a {
+    text-decoration: none; /* Sin subrayado */
+    color: #333; /* Color elegante y neutro */
+    font-weight: 400;
+    font-size: 18px;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s; /* Animación suave */
+  }
+  
+  /* Efecto hover para los enlaces */
+  nav a:hover {
+    background-color: #f0f0f0; /* Color suave al pasar el mouse */
+    color: #007bff; /* Color de énfasis (puedes cambiarlo por el que prefieras) */
+  }
+  
+  /* Estilo para el enlace activo */
+  nav a.active {
+    background-color: #007bff;
+    color: white;
+    font-weight: 600;
+  }
+  
+  /* Estilo para la imagen */
+  .icon-photo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+  }
+  

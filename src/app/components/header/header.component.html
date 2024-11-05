@@ -1,0 +1,12 @@
+<header>
+    <nav class="navbar">
+      <ul>
+        <li><img class="icon-photo" src="icon.png" alt="Icono"></li>
+        <!-- <li><a *ngIf="isLoggedIn">Bienvenido: {{ this.auth.nombreUsuario }}</a></li>  -->
+        <li><a *ngIf="!isLoggedIn" routerLink="home" routerLinkActive="active-route">Inicio</a></li>
+        <li><a *ngIf="this.auth.tipoUsuario == 'admin' " routerLink="usuarios">Usuarios</a></li> 
+        <li><a *ngIf="isLoggedIn" routerLink="perfil" routerLinkActive="active-route">Mi Perfil</a></li>
+        <li><a (click)="logout()" routerLink="/login" routerLinkActive="active-route" *ngIf="isLoggedIn">Cerrar Sesión</a></li>
+      </ul>
+    </nav>
+  </header>

@@ -1,0 +1,169 @@
+
+/* Sección de registro */
+.signup-section {
+    background-color: #e6edf7; /* Fondo blanco para el formulario */
+    padding: 20px 40px; /* Espaciado */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombra */
+    width: 50%; /* Ancho total */
+    min-width: 50%; /* Ancho mínimo del formulario */
+    min-height: 30%;
+}
+
+/* Títulos y textos */
+.signup-section h1 {
+    font-size: 2em;
+    color: #686868;
+    margin-bottom: 20px;
+    text-align: center; /* Centra el texto */
+}
+
+/* Estilos para la cuadrícula del formulario */
+.form-grid {
+    display: flex;
+    gap: 50px;
+}
+
+.left-column, .right-column {
+    flex: 1;
+}
+
+.form-group {
+    margin-bottom: 20px; /* Espacio entre los grupos */
+}
+
+.especialidad-form-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.especialidad-form-group label {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+label {
+    font-size: 1em;
+    color: #666666;
+}
+
+input {
+    width: 100%; /* Ancho total del campo de entrada */
+    padding: 10px; /* Espaciado interno */
+    border: 1px solid #718199; /* Borde del campo */
+    border-radius: 5px; /* Bordes redondeados */
+    font-size: 15px;
+    background-color: #edf4ff;
+}
+
+/* Estilo del botón de registro */
+.button-container {
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+}
+
+.a-container {
+    margin-top: 8px;
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    color: #686868;
+}
+
+.login-link {
+    color: #007bff; /* Cambia este color a tu preferencia */
+    cursor: pointer;
+    text-decoration: underline;
+    margin-left: 2px;
+}
+
+.login-link:hover {
+    text-decoration: none;
+}
+
+.submit-btn {
+    padding: 10px 20px;
+    font-size: 1.4em;
+    border: none;
+    border-radius: 5px;
+    background-color: #3262ff; /* Color del botón */
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 20%; /* Botón ocupa una fracción del ancho */
+}
+
+.submit-btn:disabled {
+    background-color: #cccccc; /* Color gris para el botón deshabilitado */
+    color: #666666; /* Color del texto gris para el botón deshabilitado */
+    cursor: not-allowed; /* Cambia el cursor a "no permitido" */
+}
+
+.submit-btn:disabled:hover {
+    background-color: #cccccc; /* Mismo color que el estado deshabilitado */
+    color: #666666; /* Mismo color de texto que el estado deshabilitado */
+    cursor: not-allowed; /* Mantiene el cursor como "no permitido" */
+}
+
+.submit-btn:hover {
+    background-color: #134aff; /* Color del botón al pasar el ratón */
+}
+
+/* Estilos para el grupo del toggle */
+.toggle-group {
+    display: flex;
+    align-items: center; /* Centra verticalmente el texto y el toggle */
+    margin-bottom: 20px; /* Espacio entre el toggle y el siguiente campo */
+}
+
+.toggle-group input[type="checkbox"] {
+    margin-right: 10px; /* Espacio entre el checkbox y el texto */
+}
+
+/* Personalización del checkbox para que se asemeje a un toggle */
+.toggle-group input[type="checkbox"] {
+    -webkit-appearance: none; /* Elimina el estilo por defecto */
+    -moz-appearance: none;
+    appearance: none;
+    width: 40px; /* Ancho del toggle */
+    height: 20px; /* Alto del toggle */
+    background-color: #ccc; /* Color de fondo cuando está desactivado */
+    border-radius: 20px; /* Bordes redondeados */
+    position: relative; /* Posicionamiento relativo para el pseudo-elemento */
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+    outline: none; /* Elimina el contorno */
+}
+
+.toggle-group input[type="checkbox"]:checked {
+    background-color: #3262ff; /* Color de fondo cuando está activado */
+}
+
+.toggle-group input[type="checkbox"]:checked::after {
+    left: 20px; /* Mueve el pseudo-elemento a la derecha */
+}
+
+.toggle-group input[type="checkbox"]::after {
+    content: ""; /* Pseudo-elemento para el toggle */
+    position: absolute;
+    width: 16px; /* Ancho del círculo del toggle */
+    height: 16px; /* Alto del círculo del toggle */
+    border-radius: 50%; /* Bordes redondeados para crear un círculo */
+    background-color: #fff; /* Color del círculo */
+    top: 2px; /* Posiciona el círculo en la parte superior */
+    transition: 0.3s; /* Suaviza la transición */
+}
+
+.error
+{
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+.imagenes
+{
+    background-color: #3262ff; /* Color del botón */
+    color: #ffffff;
+}

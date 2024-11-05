@@ -1,0 +1,73 @@
+<div class="wrapper">
+    <div class="usuarios-section">
+        <h1> Usuarios </h1>
+
+        <div class="tabs-container">
+            <!-- Navegación de Tabs -->
+            <div class="tabs">
+              <button (click)="activeTab = 'alta'" [ngClass]="{'active-tab': activeTab === 'alta'}">Alta Usuarios</button>
+              <button (click)="activeTab = 'listado'" [ngClass]="{'active-tab': activeTab === 'listado'}">Listado Usuarios</button>
+            </div>
+          
+            <!-- Contenido de cada Tab -->
+            <div class="tab-content">
+              <div *ngIf="activeTab === 'alta'">
+                <!-- Contenido de Alta Usuarios -->
+                <app-alta></app-alta>
+
+            </div>
+          
+              <div *ngIf="activeTab === 'listado'">
+
+                <div class="filter-container">
+                    <label for="userType">Filtrar por tipo de usuario:</label>
+                    <select id="userType" [(ngModel)]="selectedUserType" (change)="filterUsers()" style="margin-left: 4px; font-size:medium;">
+                      <option value="admin">Administrador</option>
+                      <option value="especialista">Especialista</option>
+                      <option value="paciente">Paciente</option>
+                    </select>
+                  </div>
+                  
+                <!-- Contenido de Listado Usuarios -->
+                <div *ngIf="usuarios.length > 0">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Nombre Completo</th>
+                          <th>DNI</th>
+                          <th>Edad</th>
+                          <th>Email</th>
+                          <ng-container *ngIf="selectedUserType=='especialista'">
+                            <th>Activo</th>
+                          </ng-container>
+                          <ng-container *ngIf="selectedUserType=='paciente'">
+                            <th>Obra Social</th>
+                          </ng-container>
+                          <!-- Agrega más columnas si necesitas -->
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let usuario of usuariosFiltrados">
+                          <td>{{ usuario.nombre }} {{ usuario.apellido }}</td>
+                          <td>{{ usuario.dni }}</td>
+                          <td>{{ usuario.edad }}</td>
+                          <td>{{ usuario.email }}</td>
+                          <ng-container *ngIf="selectedUserType=='especialista'">
+                            <input class="checkboxActivo" type="checkbox" [checked]="usuario.estado === 'aprobado' "  (change)="toggleEstado(usuario, $event)">                          
+                          </ng-container>
+
+                          <ng-container *ngIf="selectedUserType=='paciente'">
+                            <td>{{ usuario.obrasocial }}</td>
+                        </ng-container>
+                          <!-- Agrega más celdas si necesitas -->
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                      
+              </div>
+          
+            </div>
+          </div>
+    </div>
+</div>
