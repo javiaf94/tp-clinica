@@ -51,7 +51,7 @@ export class RegistroComponent {
       nombre: ['', [Validators.required, Validators.pattern('^(?!\\s*$)[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$')]],
       apellido: ['', [Validators.required, Validators.pattern('^(?!\\s*$)[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$')]],
       dni: ['', [Validators.required, Validators.pattern('^[0-9]*$'), Validators.maxLength(8), Validators.minLength(8)]],
-      edad: [[], [Validators.required,  Validators.pattern('^[0-9]*$'), Validators.min(21), Validators.max(125)]],
+      edad: [[], [Validators.required,  Validators.pattern('^[0-9]*$'), Validators.min(21), Validators.max(65)]],
       email: ['', [Validators.required, Validators.email]],
       contraseña: ['', [Validators.required, Validators.minLength(6)]],
       especialidad: [[], [Validators.required]],

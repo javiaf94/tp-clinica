@@ -2,7 +2,7 @@
 <select id="userType" (change)="onUserTypeChange($event)" style="margin-left: 4px; font-size:medium;">
   <option value="administrador">Administrador</option>
   <option value="especialista">Especialista</option>
-  <option value="paciente">Paciente</option>
+  <option value="paciente" selected>Paciente</option>
 </select>
 
 <form [formGroup]="especialistaForm" (ngSubmit)="onSubmitEspecialista()" *ngIf="selectedUserType=='especialista' ">
@@ -26,7 +26,7 @@
                 <label for="edad">Edad:</label>
                 <input type="number" id="edad" name="edad" formControlName="edad" required>
                 <div *ngIf="especialistaForm.get('edad')?.invalid && (especialistaForm.get('edad')?.touched || especialistaForm.get('edad')?.dirty)" class="error">
-                    Ingrese una edad valida (mayor a 21 y menor a 125 años).
+                    Ingrese una edad valida (mayor a 21 y menor a 65 años).
                   </div>
             </div>
             <div class="form-group">
@@ -192,7 +192,7 @@
                 <label for="edad">Edad:</label>
                 <input type="number" id="edad" name="edad" formControlName="edad" required>
                 <div *ngIf="adminForm.get('edad')?.invalid && (adminForm.get('edad')?.touched || adminForm.get('edad')?.dirty)" class="error">
-                    Ingrese una edad valida (mayor a 21 y menor a 125 años).
+                    Ingrese una edad valida (mayor a 21 y menor a 65 años).
                   </div>
             </div>
             <div class="form-group">
@@ -223,7 +223,7 @@
             <div class="form-group">
                 <label for="imagenes">Subir imágen de perfil:</label>
                 <input type="file" id="imagenes" name="imagenes" (change)="onFileChange($event)" accept="image/*"  required>
-                <div *ngIf="imagenesInvalidEspecialista" class="error">
+                <div *ngIf="imagenesInvalidAdministrador" class="error">
                     Debe seleccionar exactamente 1 imágen.
             </div>
         </div>

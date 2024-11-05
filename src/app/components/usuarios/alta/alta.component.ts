@@ -22,12 +22,14 @@ export class AltaComponent {
   especialidades: string[] = [];
   imagenesInvalid: boolean = false; // Para validar las imágenes
   imagenesInvalidEspecialista: boolean = false; // Para validar las imágenes
+  imagenesInvalidAdministrador: boolean = false; // Para validar las imágenes
 
-  selectedUserType: string = 'administrador';
+  selectedUserType: string = 'paciente';
 
   usuarioForm!: FormGroup;
   especialistaForm!: FormGroup;
   adminForm!: FormGroup;
+
 
   constructor( private firestore: Firestore,  private router: Router, private authService: AuthService, private fb: FormBuilder, private storage: Storage)
   {
@@ -52,7 +54,7 @@ export class AltaComponent {
       nombre: ['', [Validators.required, Validators.pattern('^(?!\\s*$)[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$')]],
       apellido: ['', [Validators.required, Validators.pattern('^(?!\\s*$)[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$')]],
       dni: ['', [Validators.required, Validators.pattern('^[0-9]*$'), Validators.maxLength(8), Validators.minLength(8)]],
-      edad: [[], [Validators.required,  Validators.pattern('^[0-9]*$'), Validators.min(21), Validators.max(125)]],
+      edad: [[], [Validators.required,  Validators.pattern('^[0-9]*$'), Validators.min(21), Validators.max(65)]],
       email: ['', [Validators.required, Validators.email]],
       contraseña: ['', [Validators.required, Validators.minLength(6)]],
       especialidad: [[], [Validators.required]],
@@ -66,24 +68,32 @@ export class AltaComponent {
       nombre: ['', [Validators.required, Validators.pattern('^(?!\\s*$)[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$')]],
       apellido: ['', [Validators.required, Validators.pattern('^(?!\\s*$)[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$')]],
       dni: ['', [Validators.required, Validators.pattern('^[0-9]*$'), Validators.maxLength(8), Validators.minLength(8)]],
-      edad: [[], [Validators.required,  Validators.pattern('^[0-9]*$'), Validators.min(21), Validators.max(125)]],
+      edad: [[], [Validators.required,  Validators.pattern('^[0-9]*$'), Validators.min(21), Validators.max(65)]],
       email: ['', [Validators.required, Validators.email]],
       contraseña: ['', [Validators.required, Validators.minLength(6)]],
       imagenes: [null, this.imageValidator.bind(this)] // Asigna el validador aquí
 
     });
+
     this.especialistaForm.get('especialidadadicional')?.clearValidators();
     this.especialistaForm.get('especialidadadicional')?.updateValueAndValidity();
   }
 
 
   imageValidator(control: any) {
-    if (this.selectedUserType=='especialista') {
+    if (this.selectedUserType  == 'especialista') {
       // Para el formulario especialista: 1 imagen es requerida
       if (!control.value || control.value.length !== 1) {
         return { required: true }; // Invalido si no hay imagen o no es exactamente 1
       }
-    } else {
+    }
+    else if (this.selectedUserType  == 'administrador') {
+      // Para el formulario especialista: 1 imagen es requerida
+      if (!control.value || control.value.length !== 1) {
+        return { required: true }; // Invalido si no hay imagen o no es exactamente 1
+      }
+    }
+     else {
       // Para el formulario usuario: 2 imágenes son requeridas
       if (!control.value || control.value.length !== 2) {
         return { required: true }; // Invalido si no hay imagen o no son exactamente 2
@@ -96,7 +106,7 @@ export class AltaComponent {
     const files = event.target.files;
 
     // Verificar que se hayan subido la cantidad correcta de imágenes
-    if (this.selectedUserType  == 'especialista' && files.length === 1 || this.selectedUserType  == 'paciente' && files.length === 2 || this.selectedUserType  == 'administrador' && files.length === 1 ) {
+    if ( ((this.selectedUserType  == 'especialista' || this.selectedUserType  == 'administrador') && files.length === 1  ) || this.selectedUserType  != 'especialista' && files.length === 2) {
         const fileArray = Array.from(files);
         const imageDataArray: any[] = [];
 
@@ -112,9 +122,14 @@ export class AltaComponent {
                     if (this.selectedUserType  == 'especialista') {
                         this.especialistaForm.patchValue({ imagenes: imageDataArray });
                         this.imagenesInvalidEspecialista = false;
-                    } else {
+                    } else if (this.selectedUserType  == 'paciente') {
                         this.usuarioForm.patchValue({ imagenes: imageDataArray });
                         this.imagenesInvalid = false;
+                    }
+                    else
+                    {
+                      this.adminForm.patchValue({ imagenes: imageDataArray });
+                      this.imagenesInvalidAdministrador = false;
                     }
                 }
             };
@@ -123,27 +138,25 @@ export class AltaComponent {
     } else {
         if (this.selectedUserType  == 'especialista') {
             this.imagenesInvalidEspecialista = true;
-        } else {
+        } else if (this.selectedUserType  == 'paciente') {
             this.imagenesInvalid = true;
+        }
+        else
+        {
+          this.imagenesInvalidAdministrador = true;
+
         }
     }
 
     // Actualizar la validez del control de imágenes
     this.especialistaForm.get('imagenes')?.updateValueAndValidity();
     this.usuarioForm.get('imagenes')?.updateValueAndValidity();
+    this.adminForm.get('imagenes')?.updateValueAndValidity();
+
 }
 
 
-  toggleEspecialista()
-  {
-    this.usuarioForm.reset();
-    this.especialistaForm.reset();
-    this.otra = false;
-
-    this.especialista = !this.especialista;
-    
-  }
-
+ 
   onCheckboxChange(value: string) {
     const index = this.especialidades.indexOf(value);
     if (index === -1) {
@@ -218,12 +231,13 @@ export class AltaComponent {
       });
 
       Swal.fire( { title: 'Usuario creado',
-        text: 'El usuario fue creado correctamente. Se envió un email para validar la cuenta antes de poder ingresar',
+        text: 'El usuario fue creado correctamente. Se envió un email para que el usuario valide la cuenta antes de poder ingresar',
         icon: 'success',
         confirmButtonColor: '#4CAF50',
         background: '#f2f2f2',
         heightAuto: false
       });    
+      this.router.navigate(['login']);
     }
     catch(e)
     {
@@ -249,8 +263,7 @@ export class AltaComponent {
     const especialidadesArray = especialidades.map((especialidad: string) => 
       especialidad === 'Otra' ? this.especialistaForm.get('especialidadadicional')?.value : especialidad
     );
-    
-
+  
     try
     {
       await this.authService.register(email, contraseña);
@@ -273,15 +286,16 @@ export class AltaComponent {
         especialidades: especialidadesArray, // Puedes definir el estado inicial que desees
         foto1: imageURL1,
         tipo: 'especialista',
-        estado: 'pendiente'
+        estado: 'aprobado'
       });
       Swal.fire( { title: 'Usuario creado',
-        text: 'El usuario fue creado correctamente. Se envió un email para validar la cuenta antes de poder ingresar. Tenga en cuenta que su usuario también deberá ser aprobado por un administrador',
+        text: 'El usuario fue creado correctamente. Se envió un email para que el usuario valide la cuenta antes de poder ingresar.',
         icon: 'success',
         confirmButtonColor: '#4CAF50',
         background: '#f2f2f2',
         heightAuto: false
       });    
+      this.router.navigate(['login']);
     }
     catch(e)
     {
@@ -295,6 +309,9 @@ export class AltaComponent {
     }  
     }
 
+  goToLogin(){
+    this.router.navigate(['login']);
+  }
 
   onUserTypeChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement; // Obtiene el elemento select
@@ -305,25 +322,18 @@ export class AltaComponent {
 
   async onSubmitAdministrador()
   {
-    const nombre = this.especialistaForm.get('nombre')?.value;
-    const apellido = this.especialistaForm.get('apellido')?.value;      
-    const dni = this.especialistaForm.get('dni')?.value;      
-    const edad = this.especialistaForm.get('edad')?.value;      
-    const email = this.especialistaForm.get('email')?.value; 
-    const contraseña = this.especialistaForm.get('contraseña')?.value; 
-    const especialidades = this.especialistaForm.get('especialidad')?.value; 
-
-    const especialidadesArray = especialidades.map((especialidad: string) => 
-      especialidad === 'Otra' ? this.especialistaForm.get('especialidadadicional')?.value : especialidad
-    );
-    
-
+    const nombre = this.adminForm.get('nombre')?.value;
+    const apellido = this.adminForm.get('apellido')?.value;      
+    const dni = this.adminForm.get('dni')?.value;      
+    const edad = this.adminForm.get('edad')?.value;      
+    const email = this.adminForm.get('email')?.value; 
+    const contraseña = this.adminForm.get('contraseña')?.value;
     try
     {
       await this.authService.register(email, contraseña);
 
       const storage = getStorage();
-      const imagenes = this.especialistaForm.get('imagenes')?.value;
+      const imagenes = this.adminForm.get('imagenes')?.value;
       const imageRef1 = ref(storage, `usuarios/${email}_1`);
 
      // Subir la primera imagen
@@ -337,19 +347,18 @@ export class AltaComponent {
         nombre: nombre,
         apellido: apellido,
         edad: edad, // Asignamos la imagen
-        especialidades: especialidadesArray, // Puedes definir el estado inicial que desees
         foto1: imageURL1,
-        tipo: 'especialista',
-        estado: 'pendiente'
+        tipo: 'administrador',
+        estado: ''
       });
       Swal.fire( { title: 'Usuario creado',
-        text: 'El usuario fue creado correctamente. Se envió un email para validar la cuenta antes de poder ingresar. Tenga en cuenta que su usuario también deberá ser aprobado por un administrador',
+        text: 'El usuario fue creado correctamente. Se envió un email para que el usuario valide la cuenta antes de poder ingresar',
         icon: 'success',
         confirmButtonColor: '#4CAF50',
         background: '#f2f2f2',
         heightAuto: false
       });    
-  
+      this.router.navigate(['login']);
     }
     catch(e)
     {
@@ -361,5 +370,5 @@ export class AltaComponent {
         heightAuto: false
       })  
     }  
-    }
+  }
 }
