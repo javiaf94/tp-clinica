@@ -27,7 +27,7 @@ export class AuthService {
       if (user && user.emailVerified) {
         return user; // Retorna el usuario si está verificado
       } 
-      else if (email == 'especialista@prueba.com' || email == 'administrador@prueba.com' || email == 'paciente@prueba.com')
+      else if (email == 'especialista@prueba.com' || email == 'administrador@prueba.com' || email == 'paciente@prueba.com' ||  email =='especialista2@prueba.com' || email =='paciente2@prueba.com' || email =='paciente3@prueba.com')
       {
         return user; // Retorna el usuario si está verificado
       }

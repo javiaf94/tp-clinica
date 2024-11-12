@@ -1,16 +1,31 @@
 <div class="wrapper">
-    <div class="signup-section">
+    <div class="seleccion-section" *ngIf="!tipoSeleccionado">
+        <div class = "selection-container">
+            <h1> Elige el tipo de usuario que deseas registrar</h1>
+            <!-- Botón para paciente -->
+            <button class="user-button" (click)="mostrarFormularioPaciente()">
+              <img src="paciente.png" alt="Paciente" class="user-image" />
+            </button>
+          
+            <!-- Botón para especialista -->
+            <button class="user-button" (click)="mostrarFormularioEspecialista()">
+              <img src="doctor.png" alt="Especialista" class="user-image" />
+            </button>
+        </div>
+    </div>
+
+    <div class="signup-section" *ngIf="tipoSeleccionado">
 
         <app-spinner [loading]="loading"></app-spinner>
 
         <h1>Regístrate</h1>
 
-        <div class="toggle-group" >
+        <!-- <div class="toggle-group" >
             <label for="clinic-staff">
                 <input type="checkbox" id="clinic-staff" name="clinic-staff" (click)="toggleEspecialista()">
                 ¿Eres personal de la clínica?
             </label>
-        </div>
+        </div> -->
 
         <form [formGroup]="especialistaForm" (ngSubmit)="onSubmitEspecialista()" *ngIf="this.especialista">
             <div class="form-grid">
@@ -104,10 +119,18 @@
             <div class="button-container">
                 <button type="submit" class="submit-btn" [disabled]="especialistaForm.invalid">Registrarse</button>
             </div>
-            <div class="a-container">
+
+        </form>
+            
+            <div class="captcha-container" style="margin-top: 5px;" *ngIf="this.especialista">
+                <div *ngIf="captchaImageUrl" class="captcha-wrapper">
+                    <img [src]="captchaImageUrl" alt="Captcha" class="captcha-image" />
+                    <input type="text" placeholder="Ingrese el captcha" [(ngModel)]="userInputCaptcha" class="captcha-input" />
+                </div>
+            </div>
+            <div class="a-container"  *ngIf="this.especialista">
                 Ya posees una cuenta?   <a (click)="goToLogin()" class="login-link"> Inicia sesión</a>
             </div>
-        </form>
 
         
         <!-- Similar structure can be applied for the non-especialista form -->
@@ -180,10 +203,18 @@
             <div class="button-container">
                 <button type="submit" class="submit-btn" [disabled]="usuarioForm.invalid">Registrarse</button>
             </div>
-            <div class="a-container">
+            
+            </form>
+            <div class="captcha-container" style="margin-top: 5px;" *ngIf="!this.especialista">
+                <div *ngIf="captchaImageUrl" class="captcha-wrapper">
+                    <img [src]="captchaImageUrl" alt="Captcha" class="captcha-image" />
+                    <input type="text" placeholder="Ingrese el captcha" [(ngModel)]="userInputCaptcha"class="captcha-input" />
+                </div>
+            </div>
+
+            <div class="a-container" *ngIf="!this.especialista">
                 Ya posees una cuenta?   <a (click)="goToLogin()" class="login-link"> Inicia sesión</a>
             </div>
-        </form>
 
     </div>
 </div>

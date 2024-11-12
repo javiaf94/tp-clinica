@@ -1,0 +1,70 @@
+<div class="wrapper">
+    <div class="paciente-section" *ngIf="usuario.tipo =='paciente'">
+      <h1>Mis turnos</h1>
+      
+      <!-- Input para filtrar -->
+      <input 
+        type="text" 
+        placeholder="Filtrar por Especialidad, Especialista o Turno"
+        [(ngModel)]="filtro" 
+        (input)="filtrarTurnosPaciente()" 
+      />
+      
+      <!-- Mostrar los turnos filtrados -->
+      <div class="turnos-container">
+        <ng-container *ngFor="let turno of turnosFiltradosPaciente">
+          <div class="turno-item">
+            <h2>Turno: {{turno.turno}}</h2>
+            <div>Especialista: {{turno.especialista}}</div>
+            <div>Especialidad: {{turno.especialidad}}</div>
+            <div>Estado del turno: {{turno.estado}}</div>
+            <div *ngIf="turno.estado =='cancelado' ">Motivo: {{turno.comentario_cancelacion}}</div>
+            <div *ngIf="turno.estado =='rechazado' ">Motivo: {{turno.comentario_rechazo}}</div>
+
+            <div class="turno-buttons">
+              <button *ngIf="turno.estado != 'finalizado' && turno.estado != 'cancelado' && turno.estado != 'rechazado'" (click)="cancelarTurno(turno)">Cancelar Turno</button>
+              <button *ngIf="turno.resena" (click)="verResena(turno)">Ver Reseña</button>
+              <button *ngIf="turno.estado == 'finalizado' && !turno.calificacion" (click)="calificarAtencion(turno)">Calificar atención</button>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  
+    <div class="especialista-section" *ngIf="usuario.tipo =='especialista'">
+      <h1>Mis turnos</h1>
+      
+      <!-- Input para filtrar -->
+      <input 
+        type="text" 
+        placeholder="Filtrar por Especialidad o Paciente"
+        [(ngModel)]="filtro" 
+        (input)="filtrarTurnosEspecialista()" 
+      />
+      
+      <!-- Mostrar los turnos filtrados -->
+      <div class="turnos-container">
+        <ng-container *ngFor="let turno of turnosFiltradosEspecialista">
+          <div class="turno-item">
+            <h2>Turno: {{turno.turno}}</h2>
+            <div>Paciente: {{turno.paciente}}</div>
+            <div>Especialidad: {{turno.especialidad}}</div>
+            <div>Estado del turno: {{turno.estado}}</div>
+            <div *ngIf="turno.estado =='cancelado' ">Motivo: {{turno.comentario_cancelacion}}</div>
+            <div *ngIf="turno.estado =='rechazado' ">Motivo: {{turno.comentario_rechazo}}</div>
+
+            
+            <div class="turno-buttons">
+              <button *ngIf="turno.estado != 'finalizado' && turno.estado != 'rechazado' && turno.estado != 'aceptado' && turno.estado != 'cancelado'" (click)="cancelarTurno(turno)">Cancelar Turno</button>
+              <button *ngIf="turno.estado != 'finalizado' && turno.estado != 'cancelado' && turno.estado != 'aceptado' && turno.estado !='rechazado'"  (click)="rechazarTurno(turno)">Rechazar Turno</button>
+              <button *ngIf="turno.estado != 'finalizado' && turno.estado != 'rechazado' && turno.estado != 'cancelado' && turno.estado != 'aceptado'" (click)="aceptarTurno(turno)">Aceptar Turno</button>
+              <button *ngIf="turno.estado == 'aceptado'" (click)="finalizarTurno(turno)">Finalizar Turno</button>
+              <button *ngIf="turno.resena && turno.estado == 'finalizado'" (click)="verResena(turno)">Ver Reseña</button>
+              <button *ngIf="turno.calificacion && turno.estado == 'finalizado'" (click)="verCalificacion(turno)">Ver Calificación</button>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  

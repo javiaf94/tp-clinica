@@ -3,6 +3,7 @@ import { AuthService } from '../../services/auth.service';
 import { map } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Firestore, getDocs, collection, query, where } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-header',
@@ -15,22 +16,33 @@ export class HeaderComponent {
 
   isLoggedIn = false;
   userEmail!: string;
+  usuario: any;
 
-
-  constructor(public auth: AuthService){
+  constructor(public auth: AuthService, private firestore: Firestore){
 
   }
 
   ngOnInit()
   {
-    this.auth.isLoggedIn().pipe(
-      map(user => ({
-        loggedIn: !!user, // Convert user object to boolean (true/false)
-        email: user ? user.email : null // Retrieve user email if logged in
-      }))
-    ).subscribe(({ loggedIn, email }) => {
-      this.isLoggedIn = loggedIn; // Update isLoggedIn flag
-      this.userEmail = email; // Update userEmail attribute
+    this.auth.getUserEmail().subscribe(async (email) => {
+      if (email) {
+        try {
+          this.isLoggedIn = true;
+          // Obtener el usuario actual
+          const usuariosRef = collection(this.firestore, 'usuarios');
+          const q = query(usuariosRef, where('email', '==', email));
+          const querySnapshot = await getDocs(q);
+          querySnapshot.forEach((doc) => {
+            this.usuario = doc.data();
+          });
+
+          if (!this.usuario) {
+            console.log('Usuario no encontrado');
+          }
+        } catch (error) {
+          console.error('Error al obtener el usuario o los especialistas:', error);
+        }
+      }
     });
   }
    
@@ -41,6 +53,8 @@ export class HeaderComponent {
     this.auth.mailUsuario = '';
     this.auth.tipoUsuario = '';
     this.auth.nombreUsuario = '';
+    this.isLoggedIn = false;
   }
+
 
 }

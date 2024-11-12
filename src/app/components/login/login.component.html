@@ -5,6 +5,7 @@
 
         <h1>Iniciar sesión</h1>
 
+
         <form [formGroup]="form" (ngSubmit)="onLogin()">
             <div class="form-grid">                     
             <div class="form-group">
@@ -30,17 +31,32 @@
 
         </form>  
 
-        <div class="quick-login-section">
+        <!-- <div class="quick-login-section">
             <h3>Inicio de sesión rápido</h3>
             <div class="quick-login-buttons">
                 <button class="quick-login-btn paciente" (click)="completarAccesoRapido(email1, password)">Completar datos paciente</button>
                 <button class="quick-login-btn especialista" (click)="completarAccesoRapido(email2, password)">Completar datos especialista</button>
                 <button class="quick-login-btn administrador" (click)="completarAccesoRapido(email3, password)">Completar datos administrador</button>
             </div>
-        </div>
-
+        </div> -->
+        
         <div class="a-container">
             No posees una cuenta aún?   <a (click)="goToRegister()" class="login-link"> Registrarse</a>
         </div>
     </div>
+    
+    <div class="fab-container">
+        <!-- Botón principal de FAB -->
+        <button class="fab-button" (click)="toggleFab()">
+          <span>+</span>
+        </button>
+      
+        <!-- Botones secundarios flotantes -->
+        <div *ngIf="fabOpen" class="fab-list">
+          <button class="fab-item" *ngFor="let usuario of usuarios" (click)="seleccionarUsuario(usuario)">
+            <img [src]="usuario.imagen" [alt]="usuario.nombre" class="user-image" />
+          </button>
+        </div>
+      </div>
+
 </div>

@@ -1,0 +1,88 @@
+/* Contenedor principal */
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 92.3vh;
+    width: 100vw;
+    background-color: #292952;
+    background-image: url('../../../../public/background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Sección de solicitar turno */
+.perfil-section {
+    background-color: #f7f9fc;
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    width: 85%;
+    min-width: 85%;
+    min-height: 700px;
+    display: flex;
+    flex-direction: column; /* Asegura que los elementos estén en una columna */
+    align-items: center;
+    margin-top: 30px;
+    gap: 20px; /* Espacio entre los elementos */
+}
+
+/* Títulos y textos */
+.perfil-section h1 {
+    font-size: 2.5em;
+    color: #4a4a4a;
+    margin-bottom: 30px;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Estilos para los selectores */
+label {
+    font-size: 1.2em;
+    color: #333;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+select {
+    padding: 10px;
+    font-size: 1em;
+    width: 400px;  /* Ancho fijo */
+    max-width: 100%; /* Permite que el ancho se ajuste al 100% de su contenedor */
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    margin-bottom: 20px; /* Espaciado entre los selectores */
+    background-color: #fff;
+}
+
+select:focus {
+    outline: none;
+    border-color: #4a90e2;
+}
+/* Estilo de los botones */
+.guardar-turno-btn {
+    padding: 12px 18px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.2em;
+    width: 100%;
+    max-width: 400px;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+}
+
+.guardar-turno-btn:hover {
+    background-color: #357ab7;
+}
+
+/* Estilos para los mensajes de no turnos disponibles */
+.no-turnos-message {
+    font-size: 1.2em;
+    color: #ff6f61;
+    text-align: center;
+    margin-top: 20px;
+}

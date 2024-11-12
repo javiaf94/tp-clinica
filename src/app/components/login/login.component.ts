@@ -1,16 +1,20 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Renderer2  } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
 import { Firestore, collection, query, where, getDocs} from '@angular/fire/firestore';
 import { SpinnerComponent } from '../spinner/spinner.component';
+import { IonicModule } from '@ionic/angular';
+import { IonIcon, IonFab, IonFabButton, IonFabList } from '@ionic/angular/standalone';
+import { person, personCircle } from 'ionicons/icons';
+import { addIcons } from 'ionicons';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SpinnerComponent],
+  imports: [CommonModule, ReactiveFormsModule, SpinnerComponent, IonicModule], // IonIcon, IonFab, IonFabButton, IonFabList],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -24,8 +28,26 @@ export class LoginComponent {
 
   loading: boolean = false;
 
+  fabOpen = false;
+  usuarios = [
+    { nombre: 'Admin', imagen: 'admin.png', email: 'administrador@prueba.com'},
+    { nombre: 'Especialista 1', imagen: 'doctor.png', email: 'especialista@prueba.com' },
+    { nombre: 'Especialista 2', imagen: 'doctor.png', email: 'especialista2@prueba.com' },
+    { nombre: 'Paciente 1', imagen: 'paciente.png', email: 'paciente@prueba.com'},
+    { nombre: 'Paciente 2', imagen: 'paciente.png', email: 'paciente2@prueba.com' },
+    { nombre: 'Paciente 3', imagen: 'paciente.png', email: 'paciente3@prueba.com' }
+  ];
+
+  toggleFab() {
+    this.fabOpen = !this.fabOpen;
+  }
+  seleccionarUsuario(usuario: any) {
+    this.form.patchValue( {['email']: usuario.email, ['contraseña']: this.password});
+    // Agrega la lógica de redirección o manejo según el tipo de usuario seleccionado
+  }
   constructor(private fb:FormBuilder, private router: Router, private auth:AuthService, private firestore: Firestore)
   {
+    addIcons({personCircle });
 
   }
 
@@ -124,4 +146,7 @@ export class LoginComponent {
   {
     this.form.patchValue( {['email']: email, ['contraseña']: password});
   }
+
+  
 }
+

@@ -1,0 +1,55 @@
+<div class="wrapper">
+    <div class="perfil-section">
+        <h1> Solicitar turno </h1>
+
+        <div class="paciente-selector" *ngIf="this.usuario.tipo == 'admin'">
+            <label for="paciente"><strong>Seleccionar Paciente:</strong></label>
+            <select id="paciente" [(ngModel)]="selectedPaciente" (ngModelChange)="seleccionarPaciente()">
+                <option *ngFor="let paciente of pacientes" [value]="paciente.email">
+                    {{ paciente.nombre }} {{ paciente.apellido }}
+                </option>
+            </select>
+        </div>
+
+        <!-- Dropdown para seleccionar especialidad -->
+        <div class="especialidad-selector">
+            <label for="especialidad"><strong>Seleccionar Especialidad:</strong></label>
+            <select id="especialidad" [(ngModel)]="selectedEspecialidad" (ngModelChange)="filtrarEspecialistasPorEspecialidad()">
+                <option *ngFor="let especialidad of especialidadesDisponibles" [value]="especialidad">
+                    {{ especialidad }}
+                </option>
+            </select>
+        </div>
+
+        <!-- Dropdown para seleccionar especialista -->
+        <div *ngIf="especialistasFiltrados.length > 0">
+            <label for="especialista"><strong>Seleccionar Especialista:</strong></label>
+            <select id="especialista" [(ngModel)]="selectedEspecialista" (ngModelChange)="obtenerTurnosDisponibles()">
+                <option *ngFor="let especialista of especialistasFiltrados" [value]="especialista.email">
+                    {{ especialista.nombre }} {{ especialista.apellido }}
+                </option>
+            </select>
+        </div>
+
+        <!-- Dropdown para seleccionar turno (solo si hay turnos disponibles) -->
+        <div *ngIf="turnosDisponibles.length > 0; else noTurnosDisponibles">
+            <label for="turno"><strong>Seleccionar Turno:</strong></label>
+            <select id="turno" [(ngModel)]="selectedTurno">
+                <option *ngFor="let turno of turnosDisponibles" [value]="turno">
+                    {{ turno }}
+                </option>
+            </select>
+        </div>
+        
+        <!-- Mensaje en caso de no haber turnos disponibles -->
+        <ng-template #noTurnosDisponibles>
+            <p class="no-turnos-message" *ngIf="this.selectedEspecialidad && this.selectedEspecialista">Lamentamos, no hay turnos disponibles en este momento.</p>
+        </ng-template>
+
+        <div *ngIf="selectedTurno">
+            <button (click)="guardarTurno()" class="guardar-turno-btn">
+                Guardar Turno
+            </button>
+        </div>
+    </div>
+</div>

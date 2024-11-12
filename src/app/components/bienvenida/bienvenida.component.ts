@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { Router, RouterLink } from '@angular/router';
-
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-bienvenida',
   standalone: true,

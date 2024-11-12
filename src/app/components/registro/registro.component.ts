@@ -4,10 +4,11 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Firestore, addDoc, collection,getDocs, query, where } from '@angular/fire/firestore';
-import { ref, uploadString, getDownloadURL, getStorage } from 'firebase/storage';
+import { ref, uploadString, getDownloadURL, getStorage, listAll } from 'firebase/storage';
 import { Storage } from '@angular/fire/storage';
 import Swal from 'sweetalert2';
 import { SpinnerComponent } from '../spinner/spinner.component';
+
 
 @Component({
   selector: 'app-registro',
@@ -24,20 +25,56 @@ export class RegistroComponent {
   especialidades: string[] = [];
   imagenesInvalid: boolean = false; // Para validar las imágenes
   imagenesInvalidEspecialista: boolean = false; // Para validar las imágenes
+  
+  tipoSeleccionado:boolean = false;
 
   loading: boolean = false;
 
   usuarioForm!: FormGroup;
   especialistaForm!: FormGroup;
 
+  captchaImageUrl: string | null = null;
+  captchaCode: string = '';
+  userInputCaptcha: string = '';
+  captchaValidated: boolean = false; // Propiedad inicializada por defecto
+
   constructor( private firestore: Firestore,  private router: Router, private authService: AuthService, private fb: FormBuilder, private storage: Storage)
   {
  
   }
- 
+
+  loadCaptcha(): void {
+    const storage = getStorage(); // Usa el método consistente en tu código
+    const folderPath = 'captcha/';
+    const folderRef = ref(storage, folderPath); // Referencia al path de la carpeta
+  
+    // Obtiene todos los elementos de la carpeta de captcha
+    listAll(folderRef).then((result) => {
+      if (result.items.length > 0) {
+        const randomIndex = Math.floor(Math.random() * result.items.length);
+        const selectedItem = result.items[randomIndex];
+        
+        // Obtiene la URL de descarga de la imagen seleccionada
+        getDownloadURL(selectedItem).then((url) => {
+          this.captchaImageUrl = url;
+          this.captchaCode = selectedItem.name.split('.')[0]; // Extrae el nombre del archivo sin extensión
+        });
+      }
+    }).catch((error) => {
+      console.error('Error al cargar el captcha:', error);
+    });
+  }
+
+  validateCaptcha(): boolean {
+    this.captchaValidated = this.userInputCaptcha == this.captchaCode;
+    return this.captchaValidated;
+  }
+
 
   ngOnInit()
   {
+    this.loadCaptcha();
+
     this.usuarioForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.pattern('^(?!\\s*$)[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$')]],
       apellido: ['', [Validators.required, Validators.pattern('^(?!\\s*$)[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$')]],
@@ -169,137 +206,188 @@ export class RegistroComponent {
 
   async onSubmit()
   {
-    this.loading = true; // Activa el spinner
-
-    const nombre = this.usuarioForm.get('nombre')?.value;
-    const apellido = this.usuarioForm.get('apellido')?.value;      
-    const dni = this.usuarioForm.get('dni')?.value;      
-    const edad = this.usuarioForm.get('edad')?.value;      
-    const email = this.usuarioForm.get('email')?.value; 
-    const contraseña = this.usuarioForm.get('contraseña')?.value; 
-    const obrasocial = this.usuarioForm.get('obrasocial')?.value; 
-
-    try
+    if(this.validateCaptcha())
     {
-      await this.authService.register(email, contraseña);
 
-      const storage = getStorage();
-      const imagenes = this.usuarioForm.get('imagenes')?.value;
-      const imageRef1 = ref(storage, `usuarios/${email}_1`);
-      const imageRef2 = ref(storage, `usuarios/${email}_2`);
-
-          // Subir la primera imagen
-      await uploadString(imageRef1, imagenes[0].dataUrl, 'data_url');
-      const imageURL1 = await getDownloadURL(imageRef1);
-
-      // Subir la segunda imagen
-      await uploadString(imageRef2, imagenes[1].dataUrl, 'data_url');
-      const imageURL2 = await getDownloadURL(imageRef2);
-
-      const col = collection(this.firestore, 'usuarios'); // Colección de usuarios
-      await addDoc(col, {
-        email: email,
-        dni: dni,
-        nombre: nombre,
-        apellido: apellido,
-        edad: edad, // Asignamos la imagen
-        obrasocial: obrasocial, // Puedes definir el estado inicial que desees
-        foto1: imageURL1,
-        foto2: imageURL2,
-        tipo: 'paciente'
-      });
-
-      Swal.fire( { title: 'Usuario creado',
-        text: 'El usuario fue creado correctamente. Se envió un email para validar la cuenta antes de poder ingresar',
-        icon: 'success',
-        confirmButtonColor: '#4CAF50',
-        background: '#f2f2f2',
-        heightAuto: false
-      });    
-      this.router.navigate(['login']);
-      this.loading = false;
+      this.loading = true; // Activa el spinner
+  
+      const nombre = this.usuarioForm.get('nombre')?.value;
+      const apellido = this.usuarioForm.get('apellido')?.value;      
+      const dni = this.usuarioForm.get('dni')?.value;      
+      const edad = this.usuarioForm.get('edad')?.value;      
+      const email = this.usuarioForm.get('email')?.value; 
+      const contraseña = this.usuarioForm.get('contraseña')?.value; 
+      const obrasocial = this.usuarioForm.get('obrasocial')?.value; 
+  
+      try
+      {
+        await this.authService.register(email, contraseña);
+  
+        const storage = getStorage();
+        const imagenes = this.usuarioForm.get('imagenes')?.value;
+        const imageRef1 = ref(storage, `usuarios/${email}_1`);
+        const imageRef2 = ref(storage, `usuarios/${email}_2`);
+  
+            // Subir la primera imagen
+        await uploadString(imageRef1, imagenes[0].dataUrl, 'data_url');
+        const imageURL1 = await getDownloadURL(imageRef1);
+  
+        // Subir la segunda imagen
+        await uploadString(imageRef2, imagenes[1].dataUrl, 'data_url');
+        const imageURL2 = await getDownloadURL(imageRef2);
+  
+        const col = collection(this.firestore, 'usuarios'); // Colección de usuarios
+        await addDoc(col, {
+          email: email,
+          dni: dni,
+          nombre: nombre,
+          apellido: apellido,
+          edad: edad, // Asignamos la imagen
+          obrasocial: obrasocial, // Puedes definir el estado inicial que desees
+          foto1: imageURL1,
+          foto2: imageURL2,
+          tipo: 'paciente'
+        });
+  
+        Swal.fire( { title: 'Usuario creado',
+          text: 'El usuario fue creado correctamente. Se envió un email para validar la cuenta antes de poder ingresar',
+          icon: 'success',
+          confirmButtonColor: '#4CAF50',
+          background: '#f2f2f2',
+          heightAuto: false
+        });    
+        this.router.navigate(['login']);
+        this.loading = false;
+      }
+      catch(e)
+      {
+        Swal.fire( { title: 'Error!',
+          text: "El usuario ya se encuentra en uso",
+          icon: 'error',
+          confirmButtonColor: '#4CAF50',
+          background: '#f2f2f2',
+          heightAuto: false
+        })     
+        this.loading = false; // Activa el spinner
+  
+       }      
     }
-    catch(e)
+    else
     {
       Swal.fire( { title: 'Error!',
-        text: "El usuario ya se encuentra en uso",
+        text: "Asegurese de completar el captcha correctamente",
         icon: 'error',
         confirmButtonColor: '#4CAF50',
         background: '#f2f2f2',
         heightAuto: false
-      })     
+      });     
       this.loading = false; // Activa el spinner
 
-     }      
+    }
    }
 
   async onSubmitEspecialista()
   {
-    this.loading = true; // Activa el spinner
-
-    const nombre = this.especialistaForm.get('nombre')?.value;
-    const apellido = this.especialistaForm.get('apellido')?.value;      
-    const dni = this.especialistaForm.get('dni')?.value;      
-    const edad = this.especialistaForm.get('edad')?.value;      
-    const email = this.especialistaForm.get('email')?.value; 
-    const contraseña = this.especialistaForm.get('contraseña')?.value; 
-    const especialidades = this.especialistaForm.get('especialidad')?.value; 
-
-    const especialidadesArray = especialidades.map((especialidad: string) => 
-      especialidad === 'Otra' ? this.especialistaForm.get('especialidadadicional')?.value : especialidad
-    );
-    
-
-    try
+    if(this.validateCaptcha())
     {
-      await this.authService.register(email, contraseña);
 
-      const storage = getStorage();
-      const imagenes = this.especialistaForm.get('imagenes')?.value;
-      const imageRef1 = ref(storage, `usuarios/${email}_1`);
-
-     // Subir la primera imagen
-      await uploadString(imageRef1, imagenes[0].dataUrl, 'data_url');
-      const imageURL1 = await getDownloadURL(imageRef1);
-
-      const col = collection(this.firestore, 'usuarios'); // Colección de usuarios
-      await addDoc(col, {
-        email: email,
-        dni: dni,
-        nombre: nombre,
-        apellido: apellido,
-        edad: edad, // Asignamos la imagen
-        especialidades: especialidadesArray, // Puedes definir el estado inicial que desees
-        foto1: imageURL1,
-        tipo: 'especialista',
-        estado: 'pendiente'
-      });
-      Swal.fire( { title: 'Usuario creado',
-        text: 'El usuario fue creado correctamente. Se envió un email para validar la cuenta antes de poder ingresar. Tenga en cuenta que su usuario también deberá ser aprobado por un administrador',
-        icon: 'success',
-        confirmButtonColor: '#4CAF50',
-        background: '#f2f2f2',
-        heightAuto: false
-      });    
-      this.loading = false; // Activa el spinner
-
-      this.router.navigate(['login']);
+      this.loading = true; // Activa el spinner
+  
+      const nombre = this.especialistaForm.get('nombre')?.value;
+      const apellido = this.especialistaForm.get('apellido')?.value;      
+      const dni = this.especialistaForm.get('dni')?.value;      
+      const edad = this.especialistaForm.get('edad')?.value;      
+      const email = this.especialistaForm.get('email')?.value; 
+      const contraseña = this.especialistaForm.get('contraseña')?.value; 
+      const especialidades = this.especialistaForm.get('especialidad')?.value; 
+  
+      const especialidadesArray = especialidades.map((especialidad: string) => 
+        especialidad === 'Otra' ? this.especialistaForm.get('especialidadadicional')?.value : especialidad
+      );
+      
+  
+      try
+      {
+        await this.authService.register(email, contraseña);
+  
+        const storage = getStorage();
+        const imagenes = this.especialistaForm.get('imagenes')?.value;
+        const imageRef1 = ref(storage, `usuarios/${email}_1`);
+  
+       // Subir la primera imagen
+        await uploadString(imageRef1, imagenes[0].dataUrl, 'data_url');
+        const imageURL1 = await getDownloadURL(imageRef1);
+  
+        const col = collection(this.firestore, 'usuarios'); // Colección de usuarios
+        await addDoc(col, {
+          email: email,
+          dni: dni,
+          nombre: nombre,
+          apellido: apellido,
+          edad: edad, // Asignamos la imagen
+          especialidades: especialidadesArray, // Puedes definir el estado inicial que desees
+          foto1: imageURL1,
+          tipo: 'especialista',
+          estado: 'pendiente'
+        });
+        Swal.fire( { title: 'Usuario creado',
+          text: 'El usuario fue creado correctamente. Se envió un email para validar la cuenta antes de poder ingresar. Tenga en cuenta que su usuario también deberá ser aprobado por un administrador',
+          icon: 'success',
+          confirmButtonColor: '#4CAF50',
+          background: '#f2f2f2',
+          heightAuto: false
+        });    
+        this.loading = false; // Activa el spinner
+  
+        this.router.navigate(['login']);
+      }
+      catch(e)
+      {
+        Swal.fire( { title: 'Error!',
+          text: "El usuario ya se encuentra en uso",
+          icon: 'error',
+          confirmButtonColor: '#4CAF50',
+          background: '#f2f2f2',
+          heightAuto: false
+        })  
+        this.loading = false; // Activa el spinner
+  
+      }  
     }
-    catch(e)
+    else
     {
       Swal.fire( { title: 'Error!',
-        text: "El usuario ya se encuentra en uso",
+        text: "Asegurese de completar el captcha correctamente",
         icon: 'error',
         confirmButtonColor: '#4CAF50',
         background: '#f2f2f2',
         heightAuto: false
-      })  
+      });     
       this.loading = false; // Activa el spinner
-
-    }  
     }
+  }
 
   goToLogin(){
     this.router.navigate(['login']);
   }
+
+  mostrarFormularioEspecialista()
+  {
+    this.especialista = true;
+    this.tipoSeleccionado = true;
+  
+  
+  }
+  
+  mostrarFormularioPaciente()
+  {
+    this.especialista = false;
+    this.tipoSeleccionado = true;
+  
+  }
+
+
+
+
+
 }
