@@ -1,27 +1,33 @@
-# TpClinicaOnline
+<div align="center">
+  
+# Clínica Online
+  
+<img src="https://firebasestorage.googleapis.com/v0/b/sala-juegos-f7ba1.appspot.com/o/icon.png?alt=media&token=d333c6ea-dd05-41b9-b466-d2b24830c8a4" alt="Descripción de la imagen" width="300"/>
+</div>
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.10.
+> En nuestra clínica nos enfocamos en dar no solo el mejor servicio de atención médica, sino también en asegurarnos que la experiencia en nuestra plataforma online sea de primer nivel.
 
-## Development server
+### A continuación lo guiaremos por las distintas secciones de nuestra clínica online.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+##  Bienvenida
 
-## Code scaffolding
+Aquí podrá ver información sobre nuestra clínica. Podrá comenzar el proceso de registro en caso de ser su primera vez, o dirigirse al inicio de sesión de lo contrario.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+![inicio](https://github.com/user-attachments/assets/ea022a8c-c8d6-4bf4-a710-56553c29e5a5)
 
-## Build
+ Para el registro deberá elegir el tipo de usuario a registrar (Paciente o Especialista)
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+![inicio](https://github.com/user-attachments/assets/f709d36a-02c1-47cd-8587-ebc9f76e6122)
 
-## Running unit tests
+ Una vez que complete todos los datos correspondientes, deberá asegurarse de también completar el captcha de seguridad para registrarse.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+![inicio](https://github.com/user-attachments/assets/c85c81e5-6687-4c2d-a10a-5bb7b0e8851f)
 
-## Running end-to-end tests
+ Si desea iniciar sesión, basta con completar sus datos correctamente para poder acceder a nuestra plataforma.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+![inicio](https://github.com/user-attachments/assets/9932fbf2-3ab5-4b9a-b012-10a1264cab0d)
 
-## Further help
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+
+
