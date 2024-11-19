@@ -4,13 +4,52 @@ import { Firestore, collection, getDocs, updateDoc, doc } from '@angular/fire/fi
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AltaComponent } from './alta/alta.component';
 import { SpinnerComponent } from '../spinner/spinner.component';
+import { HistoriaComponent } from './historia/historia.component';
+import { trigger, transition, style, animate } from '@angular/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
   selector: 'app-usuarios',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, AltaComponent, SpinnerComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, AltaComponent, SpinnerComponent, HistoriaComponent],
   templateUrl: './usuarios.component.html',
-  styleUrl: './usuarios.component.scss'
+  styleUrl: './usuarios.component.scss',
+  animations: [
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('0.5s', style({ opacity: 1 }))
+      ]),
+      transition(':leave', [
+        animate('0.3s', style({ opacity: 0 }))
+      ])
+    ]),
+    trigger('slideIn', [
+      transition(':enter', [
+        style({ transform: 'translateX(-100%)' }),
+        animate('0.5s ease-out', style({ transform: 'translateX(0)' }))
+      ]),
+      transition(':leave', [
+        animate('0.3s ease-in', style({ transform: 'translateX(-100%)' }))
+      ])
+    ]),
+    trigger('expand', [
+      transition(':enter', [
+        style({ transform: 'scale(0.9)', opacity: 0 }),
+        animate('0.3s ease-out', style({ transform: 'scale(1)', opacity: 1 }))
+      ]),
+      transition(':leave', [
+        animate('0.2s ease-in', style({ transform: 'scale(0.9)', opacity: 0 }))
+      ])
+    ]),
+    trigger('slideInFromTop', [
+      transition(':enter', [
+        style({ transform: 'translateY(-100%)', opacity: 0 }),
+        animate('0.5s ease-out', style({ transform: 'translateY(0)', opacity: 1 }))
+      ])
+    ])
+  ]
+  
 })
 export class UsuariosComponent {
 

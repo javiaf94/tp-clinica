@@ -1,5 +1,5 @@
 <div class="wrapper">
-    <div class="signup-section">
+    <div class="signup-section" [@slideInFromTop]>
 
         <app-spinner [loading]="loading"></app-spinner>
 
@@ -47,16 +47,21 @@
     
     <div class="fab-container">
         <!-- Botón principal de FAB -->
-        <button class="fab-button" (click)="toggleFab()">
+        <button class="fab-button" [class.fab-active]="fabOpen" (click)="toggleFab()">
           <span>+</span>
         </button>
       
         <!-- Botones secundarios flotantes -->
         <div *ngIf="fabOpen" class="fab-list">
-          <button class="fab-item" *ngFor="let usuario of usuarios" (click)="seleccionarUsuario(usuario)">
+          <button 
+            class="fab-item" 
+            *ngFor="let usuario of usuarios; let i = index; let total = count" 
+            [style.animationDelay]="(total - 1 - i) * 0.1 + 's'"
+            (click)="seleccionarUsuario(usuario)">
             <img [src]="usuario.imagen" [alt]="usuario.nombre" class="user-image" />
           </button>
         </div>
       </div>
+      
 
 </div>

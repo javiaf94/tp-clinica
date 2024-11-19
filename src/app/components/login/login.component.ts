@@ -10,14 +10,25 @@ import { IonicModule } from '@ionic/angular';
 import { IonIcon, IonFab, IonFabButton, IonFabList } from '@ionic/angular/standalone';
 import { person, personCircle } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
+import { trigger, transition, style, animate } from '@angular/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, SpinnerComponent, IonicModule], // IonIcon, IonFab, IonFabButton, IonFabList],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrl: './login.component.scss',
+  animations: [
+    trigger('slideInFromTop', [
+      transition(':enter', [
+        style({ transform: 'translateY(-100%)', opacity: 0 }),
+        animate('0.5s ease-out', style({ transform: 'translateY(0)', opacity: 1 }))
+      ])
+    ])
+  ]
 })
+
 export class LoginComponent {
   
   form!: FormGroup;

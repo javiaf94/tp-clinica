@@ -1,0 +1,34 @@
+<div class="wrapper">
+    <div class="paciente-section" *ngIf="usuario.tipo =='admin'" [@slideIn]>
+      <h1>Turnos</h1>
+      
+      <!-- Input para filtrar -->
+      <input 
+        type="text" 
+        placeholder="Filtrar por Especialidad o Especialista"
+        [(ngModel)]="filtro" 
+        (input)="filtrarTurnos()" 
+      />
+      
+      <!-- Mostrar los turnos filtrados -->
+      <div class="turnos-container"  [@staggerExpand]>
+        <ng-container *ngFor="let turno of turnosFiltrados">
+          <div class="turno-item">
+            <h2>Turno: {{turno.turno}}</h2>
+            <div>Paciente: {{turno.paciente}}</div>
+            <div>Especialista: {{turno.especialista}}</div>
+            <div>Especialidad: {{turno.especialidad}}</div>
+            <div>Estado del turno: {{turno.estado}}</div>
+            <div *ngIf="turno.estado =='cancelado' ">Motivo: {{turno.comentario_cancelacion}}</div>
+            <div *ngIf="turno.estado =='rechazado' ">Motivo: {{turno.comentario_rechazo}}</div>
+
+            <div class="turno-buttons">
+              <button *ngIf="turno.estado != 'finalizado' && turno.estado != 'cancelado' && turno.estado != 'rechazado'" (click)="cancelarTurno(turno)">Cancelar Turno</button>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  
+  </div>
+  

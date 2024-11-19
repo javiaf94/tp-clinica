@@ -159,12 +159,6 @@ input {
 }
 
 /* Hover para los botones de inicio de sesión rápido */
-.quick-login-btn:hover {
-    opacity: 0.9;
-}
-
-
-
 .fab-container {
     position: fixed;
     bottom: 20px;
@@ -184,11 +178,15 @@ input {
     align-items: center;
     border: none;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, background-color 0.3s ease;
   }
   
   .fab-button:hover {
     background-color: #4c8dff;
+  }
+  
+  .fab-active {
+    transform: translateY(-10px);
   }
   
   .fab-list {
@@ -196,7 +194,6 @@ input {
     flex-direction: column;
     align-items: flex-start;
     margin-top: 10px;
-    transition: all 0.3s ease;
   }
   
   .fab-item {
@@ -210,7 +207,9 @@ input {
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: all 0.3s ease;
+    animation: fadeInUp 0.3s ease forwards;
+    opacity: 0;
+    transform: translateY(10px);
   }
   
   .fab-item:hover {
@@ -221,10 +220,22 @@ input {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    transition: transform 0.3s ease;  /* Transición suave al escalar */
+    transition: transform 0.3s ease;
   }
   
   .fab-item:hover .user-image {
-    transform: scale(1.2); /* Aumenta el tamaño de la imagen al 120% */
+    transform: scale(1.2);
+  }
+  
+  /* Animación de los botones secundarios */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
   

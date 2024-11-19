@@ -5,13 +5,37 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { DatePipe } from '@angular/common';
+import { trigger, transition, style, animate, stagger } from '@angular/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
   selector: 'app-solicitar-turno',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, DatePipe],
+  providers: [DatePipe],
   templateUrl: './solicitar-turno.component.html',
-  styleUrls: ['./solicitar-turno.component.scss']
+  styleUrls: ['./solicitar-turno.component.scss'],
+  animations: [
+    trigger('slideIn', [
+      transition(':enter', [
+        style({ transform: 'translateX(-100%)' }),
+        animate('500ms ease-out', style({ transform: 'translateX(0)' }))
+      ])
+    ]),
+    trigger('buttonExpand', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'scale(0.5)' }),
+        animate('300ms 100ms ease-out', style({ opacity: 1, transform: 'scale(1)' }))
+      ])
+    ]),
+    trigger('specialityExpand', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'scale(0.5)' }),
+        animate('300ms 200ms ease-out', style({ opacity: 1, transform: 'scale(1)' }))
+      ])
+    ])
+  ]
 })
 export class SolicitarTurnoComponent {
 
@@ -21,11 +45,11 @@ export class SolicitarTurnoComponent {
   especialidadesDisponibles: string[] = []; // Lista para almacenar las especialidades únicas
   especialistasFiltrados: any[] = []; // Lista para almacenar los especialistas filtrados por especialidad seleccionada
   selectedEspecialidad: string = ''; // Especialidad seleccionada
-  selectedEspecialista: string = ''; // Especialista seleccionado
+  selectedEspecialista: any = null; // Ahora se selecciona un objeto completo
   selectedTurno: string = ''; // Turno seleccionado
   turnosDisponibles: string[] = []; // Lista para almacenar los turnos disponibles
 
-  constructor(private authService: AuthService, private firestore: Firestore, private router: Router) {}
+  constructor(private authService: AuthService, private firestore: Firestore, private router: Router, private datePipe: DatePipe) {}
 
   ngOnInit() {
     this.authService.getUserEmail().subscribe(async (email) => {
@@ -77,6 +101,24 @@ export class SolicitarTurnoComponent {
     });
   }
 
+  // Función para filtrar especialidades según el especialista seleccionado
+  seleccionarEspecialista(especialista: any) {
+    this.selectedEspecialista = especialista;
+    this.selectedEspecialidad = '';
+    this.turnosDisponibles = [];
+    this.selectedTurno = '';
+    this.filtrarEspecialidadesPorEspecialista();
+  }
+  
+  filtrarEspecialidadesPorEspecialista() {
+    if (this.selectedEspecialista) {
+      this.especialidadesDisponibles = this.selectedEspecialista.especialidades || [];
+    } else {
+      this.especialidadesDisponibles = [];
+    }
+  }
+  
+
   // Función para filtrar los especialistas según la especialidad seleccionada
   filtrarEspecialistasPorEspecialidad() {
     if (this.selectedEspecialidad) {
@@ -90,10 +132,13 @@ export class SolicitarTurnoComponent {
 
   // Función para obtener los turnos disponibles del especialista seleccionado
   async obtenerTurnosDisponibles() {
-    const especialista = this.especialistasFiltrados.find(
-      (especialista) => especialista.email === this.selectedEspecialista
-    );
+    // const especialista = this.especialistasFiltrados.find(
+    //   (especialista) => especialista.email === this.selectedEspecialista
+    // );
   
+    const especialista = this.selectedEspecialista;
+
+
     if (especialista) {
       const agenda = especialista.horarios || []; // La agenda del especialista
       this.turnosDisponibles = []; // Limpiar los turnos previos
@@ -105,10 +150,11 @@ export class SolicitarTurnoComponent {
   
       // Obtener los turnos ya reservados para el especialista
       const turnosRef = collection(this.firestore, 'turnos');
-      const turnosQuery = query(turnosRef, where('emailEspecialista', '==', this.selectedEspecialista));
+      const turnosQuery = query(turnosRef, where('emailEspecialista', '==', this.selectedEspecialista.email));
+      console.log("especialista:", this.selectedEspecialista);
       const turnosSnapshot = await getDocs(turnosQuery);
       const turnosReservados = new Set<string>();
-  
+      console.log("turnosReservados:", turnosReservados);
       turnosSnapshot.forEach((doc) => {
         const turno = doc.data()['turno'];
         turnosReservados.add(turno); // Guardar los turnos ya reservados
@@ -184,7 +230,21 @@ export class SolicitarTurnoComponent {
     }
   }
   
-  
+  obtenerImagenEspecialidad(especialidad: string): string {
+    if (especialidad === 'Cirugia') {
+      return 'https://firebasestorage.googleapis.com/v0/b/sala-juegos-f7ba1.appspot.com/o/especialidades%2Fcirugia.png?alt=media&token=d86ee8e1-1059-45db-b48c-cfae72dd0e6e';
+    } else if (especialidad === 'Pediatria') {
+      return 'https://firebasestorage.googleapis.com/v0/b/sala-juegos-f7ba1.appspot.com/o/especialidades%2Fpediatria.jpeg?alt=media&token=481a844f-660c-4e38-a993-a7657124d9a7';
+    } else if (especialidad === 'Oftalmologia') {
+      return 'https://firebasestorage.googleapis.com/v0/b/sala-juegos-f7ba1.appspot.com/o/especialidades%2Foftalmologia.jpeg?alt=media&token=08ae0705-8f92-43c3-9bcd-2ff7f3a24422';
+    } else if (especialidad === 'General') {
+      return 'https://firebasestorage.googleapis.com/v0/b/sala-juegos-f7ba1.appspot.com/o/especialidades%2Fgeneral.png?alt=media&token=4c5073cc-e2d9-445e-b7f6-42082eb83988';
+    } else if (especialidad === 'Cardiologia') {
+      return 'https://firebasestorage.googleapis.com/v0/b/sala-juegos-f7ba1.appspot.com/o/especialidades%2Fcardiologia.png?alt=media&token=5cc55478-ea47-47cf-8d35-383e28ce5006';
+    } else {
+      return 'https://firebasestorage.googleapis.com/v0/b/sala-juegos-f7ba1.appspot.com/o/especialidades%2Fotra.png?alt=media&token=02640ea9-d360-4825-ae36-145ec4d2f1c9'; // URL por defecto
+    }
+  }
   
   // Función para obtener la fecha del próximo día de la semana, ahora considerando también la próxima semana
   obtenerFechaParaDia(diaSemana: string, fechaBase: Date): Date {
@@ -195,17 +255,14 @@ export class SolicitarTurnoComponent {
     const hoy = new Date(fechaBase);
     const diaActual = hoy.getDay();
   
-    console.log(`Hoy es ${diasDeLaSemana[diaActual]}, buscando ${diaSemana}`);
   
     // Si el día de la semana ya pasó, sumar los días necesarios para llegar al siguiente
     let diasHastaElDia = diaIndex - diaActual;
   
-    console.log(`Días hasta ${diaSemana}: ${diasHastaElDia}`);
   
     // Si el día ya pasó esta semana, avanzar a la siguiente semana
     if (diasHastaElDia <= 0) {
       diasHastaElDia += 7; // Avanzar a la próxima semana si ya pasó este día
-      console.log(`El día ya pasó esta semana, avanzando a la próxima semana.`);
     }
   
     // Crear la fecha del siguiente día de la semana (si ya pasó este día esta semana, nos movemos a la próxima semana)
@@ -222,7 +279,6 @@ export class SolicitarTurnoComponent {
       hoy.setDate(hoy.getDate() + 7); // Moverse a la siguiente semana si la fecha ya está fuera del rango
     }
   
-    console.log(`Fecha calculada para el próximo ${diaSemana}: ${hoy.toLocaleDateString('es-ES')}`);
     return hoy;
   }
   
@@ -235,15 +291,16 @@ export class SolicitarTurnoComponent {
 
         const paciente = this.selectedPaciente ?  this.pacientes.find( (paciente:any) => paciente.email === this.selectedPaciente ).nombre + ' ' + this.pacientes.find( (paciente:any) => paciente.email === this.selectedPaciente ).apellido : (this.usuario.nombre + ' ' + this.usuario.apellido);
 
-        const especialista = this.especialistasFiltrados.find(
-          (especialista) => especialista.email === this.selectedEspecialista
-        );
+        // const especialista = this.especialistasFiltrados.find(
+        //   (especialista) => especialista.email === this.selectedEspecialista
+        //  );
+        const especialista = this.selectedEspecialista;
 
         const turnoRef = collection(this.firestore, 'turnos');
         await addDoc(turnoRef, {
           emailPaciente: emailPaciente,
           paciente: paciente,
-          emailEspecialista: this.selectedEspecialista,
+          emailEspecialista: this.selectedEspecialista.email,
           especialista: especialista.nombre + ' ' + especialista.apellido,
           turno: this.selectedTurno,
           especialidad: this.selectedEspecialidad,
@@ -271,7 +328,34 @@ export class SolicitarTurnoComponent {
     }
   }
 
+  formatearFecha(turnoFecha: string): string {
+  // Separar la fecha y la hora
+  const [fecha, horas] = turnoFecha.split(', ');
 
+
+  // Parsear la fecha en formato dd/MM/yy
+  const [dia, mes, anio] = fecha.split('/');
+
+
+  // Extraer solo la primera hora del rango (antes del guion)
+  const [horaInicio] = horas.split(' - ');
+
+  // Crear una fecha válida con los componentes
+  const fechaFormateada = new Date(`${anio}-${mes}-${dia} ${horaInicio}:00`);
+
+  // Verificar si la fecha es válida
+  if (isNaN(fechaFormateada.getTime())) {
+    return 'Fecha no válida';
+  }
+
+  // Usamos DatePipe para formatear la fecha al estilo 'yyyy-MM-dd hh:mm a'
+  const fechaTransformada = this.datePipe.transform(fechaFormateada, 'yyyy-MM-dd hh:mm a');
+
+  return fechaTransformada!;
+}
+
+  
+  
   selectedPaciente:any = null;
   pacientes: any = null;
 

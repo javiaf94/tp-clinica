@@ -9,6 +9,9 @@ import { authGuard } from './guards/auth.guard';
 import { SolicitarTurnoComponent } from './components/solicitar-turno/solicitar-turno.component';
 import { authGuardPacienteAdmin } from './guards/auth.guardPacienteAdministrador';
 import { MisTurnosComponent } from './components/mis-turnos/mis-turnos.component';
+import { TurnosComponent } from './components/turnos/turnos.component';
+import { PacientesComponent } from './components/pacientes/pacientes.component';
+import { HistoriaComponent } from './components/usuarios/historia/historia.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/bienvenida', pathMatch: "full" },
@@ -19,6 +22,9 @@ export const routes: Routes = [
     { path: 'usuarios', component: UsuariosComponent, canActivate: [authGuardAdmin]},
     { path: 'solicitar-turno', component: SolicitarTurnoComponent},
     { path: 'mis-turnos', component: MisTurnosComponent},
+    { path: 'turnos', component: TurnosComponent},
+    { path: 'pacientes', component: PacientesComponent},
+    { path: 'historia', component: HistoriaComponent},
 
     { path: '**', redirectTo: '/bienvenida', pathMatch: "full"},
 

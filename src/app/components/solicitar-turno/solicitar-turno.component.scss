@@ -73,6 +73,9 @@ select:focus {
     max-width: 400px;
     margin-top: 20px;
     transition: background-color 0.3s;
+
+    display: block;
+    text-align: center;
 }
 
 .guardar-turno-btn:hover {
@@ -86,3 +89,117 @@ select:focus {
     text-align: center;
     margin-top: 20px;
 }
+
+
+.botones-especialistas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .botones-especialistas button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100px; /* Tamaño cuadrado */
+    height: 100px; /* Tamaño cuadrado */
+    border: 1px solid #ccc;
+    border-radius: 10px; /* Opcional, para esquinas ligeramente redondeadas */
+    background-color: #f9f9f9;
+    cursor: pointer;
+    overflow: hidden;
+  }
+  
+  .botones-especialistas button.selected {
+    border: 2px solid #007bff; /* Resalta el botón seleccionado */
+  }
+  
+  .imagen-especialista {
+    width: 100%;
+    height: auto;
+    max-height: 60%; /* Para asegurarse de que la imagen no sobrepase el botón */
+    max-width: 65%; /* Para asegurarse de que la imagen no sobrepase el botón */
+
+    object-fit: cover;
+  }
+  
+
+/* Contenedor de especialidades */
+.especialidades-container {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center; /* Asegura que los botones estén centrados */
+  }
+
+/* Botón de especialidad */
+.especialidad-boton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  transition: transform 0.2s;
+  width: 80px; /* Ancho específico para un botón rectangular */
+  height: 40px; /* Alto específico para un botón rectangular */
+  background-color: white;
+  margin-bottom: 10px; /* Asegura que haya espacio entre las filas de botones */
+}
+  
+.especialidad-boton img {
+    width: 100%; /* Ajusta el ancho de la imagen al contenedor */
+    height: 100%; /* Ajusta la altura de la imagen al contenedor */
+    object-fit: contain; /* Mantiene la proporción de la imagen, sin recorte */
+    border-radius: 3px; /* Bordes redondeados para la imagen */
+  }
+  
+  .especialidad-boton.selected {
+    border-color: #007bff;
+    transform: scale(1.05);
+  }
+  
+  .especialidad-boton span {
+    margin-bottom: 5px;
+    font-weight: bold;
+    text-align: center;
+  }
+
+/* Asegurar que el contenedor de turnos no afecte el contenedor de especialidades */
+.turnos-container {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+    justify-content: center; /* Asegura que los botones de turno estén centrados */
+  }
+  
+  .turno-boton {
+    width: 100px; /* Ancho y alto igual para que sea cuadrado */
+    height: 100px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #7eb5e9; /* Color de fondo opcional */
+    font-size: 13.5px; /* Tamaño de texto ajustado */
+    text-align: center;
+  }
+  
+  .turno-boton.selected {
+    border-color: #007bff;
+    transform: scale(1.05);
+  }
+  
+  .label-turno
+  {
+    display: block;
+    text-align: center;
+    margin-top: 10px; /* Espacio opcional debajo del label */
+  }

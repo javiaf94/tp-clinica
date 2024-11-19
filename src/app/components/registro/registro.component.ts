@@ -8,16 +8,24 @@ import { ref, uploadString, getDownloadURL, getStorage, listAll } from 'firebase
 import { Storage } from '@angular/fire/storage';
 import Swal from 'sweetalert2';
 import { SpinnerComponent } from '../spinner/spinner.component';
-
+import { trigger, transition, style, animate } from '@angular/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, FormsModule, SpinnerComponent],
   templateUrl: './registro.component.html',
-  styleUrl: './registro.component.scss'
-})
-export class RegistroComponent {
+  styleUrl: './registro.component.scss',
+  animations: [
+    trigger('slideInFromTop', [
+      transition(':enter', [
+        style({ transform: 'translateY(-100%)', opacity: 0 }),
+        animate('0.5s ease-out', style({ transform: 'translateY(0)', opacity: 1 }))
+      ])
+    ])
+  ]
+})export class RegistroComponent {
   
 
   especialista:boolean = false;

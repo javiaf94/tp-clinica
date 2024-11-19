@@ -1,16 +1,3 @@
-/* Contenedor principal */
-.wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 92.3vh;
-    width: 100vw;
-    background-color: #292952;
-    background-image: url('../../../../public/background.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-}
 
 /* Sección del perfil */
 .perfil-section {
@@ -27,7 +14,7 @@
 }
 
 /* Títulos y textos */
-.perfil-section h1 {
+ h1 {
     font-size: 2em;  /* Reducido el tamaño del título */
     color: #4a4a4a;
     margin-bottom: 20px;
@@ -162,16 +149,9 @@ button:hover {
     background-color: #c0392b;
 }
 
-/* Contenedor de las historias clínicas */
 .historias-clinicas {
     margin-top: 20px;
     width: 100%;
-}
-
-.historias-clinicas h3 {
-    font-size: 1.5em;  /* Título de las historias clínicas */
-    color: #333;
-    margin-bottom: 15px;
 }
 
 /* Lista de historias clínicas alineadas horizontalmente */
@@ -179,12 +159,12 @@ button:hover {
     display: flex;  /* Alineación horizontal */
     flex-wrap: wrap;  /* Cuando no hay espacio suficiente, se envuelven a una nueva línea */
     gap: 20px;  /* Espacio entre cada historia clínica */
+    justify-content: center;  /* Centra las historias clínicas en el contenedor */
 }
 
 /* Estilo de cada historia clínica */
 .historias-clinicas .historias-container > div {
-    flex: 1 1 250px;  /* Hace que cada historia ocupe un espacio de 1/4 del ancho disponible */
-    min-width: 250px;  /* Asegura que cada tarjeta tenga un ancho mínimo */
+    width: 250px;  /* Ancho fijo de las tarjetas */
     background-color: #f9f9f9;
     padding: 15px;
     border-radius: 8px;

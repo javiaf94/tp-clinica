@@ -1,0 +1,29 @@
+
+                <ng-container>
+                    <div class="historias-clinicas">
+                      <div *ngIf="historiasClinicas.length > 0; else noHistorial">
+                        <div class="historias-container">
+                        <div *ngFor="let historia of historiasClinicas">
+                        <h4>Turno: {{ historia.turno.split(',')[0] }}</h4>
+                        <p><strong>Especialidad:</strong> {{ historia.especialidad }}</p>
+                          <p><strong>Especialista:</strong> {{ historia.especialista }}</p>
+                          <p><strong>Paciente:</strong> {{ historia.paciente }}</p>
+                          <p><strong>Altura:</strong> {{ historia.datosPrincipales[0] }}</p>
+                          <p><strong>Peso:</strong> {{ historia.datosPrincipales[1] }}</p>
+                          <p><strong>Temperatura:</strong> {{ historia.datosPrincipales[2] }}</p>
+                          <p><strong>Presión:</strong> {{ historia.datosPrincipales[3] }}</p>
+                          <div *ngIf="historia.datosDinamicos">
+                            <div *ngFor="let item of historia.datosDinamicos | keyvalue">
+                              <p><strong>{{ item.key }}:</strong> {{ item.value }}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                      <ng-template #noHistorial>
+                        <p>No tienes historias clínicas registradas.</p>
+                      </ng-template>
+                    </div>
+                  </ng-container>
+
+

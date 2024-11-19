@@ -1,5 +1,5 @@
 <div class="wrapper">
-    <div class="perfil-section">
+    <div class="perfil-section" [@slideIn]>
         <h1> Solicitar turno </h1>
 
         <div class="paciente-selector" *ngIf="this.usuario.tipo == 'admin'">
@@ -11,42 +11,63 @@
             </select>
         </div>
 
-        <!-- Dropdown para seleccionar especialidad -->
-        <div class="especialidad-selector">
-            <label for="especialidad"><strong>Seleccionar Especialidad:</strong></label>
-            <select id="especialidad" [(ngModel)]="selectedEspecialidad" (ngModelChange)="filtrarEspecialistasPorEspecialidad()">
-                <option *ngFor="let especialidad of especialidadesDisponibles" [value]="especialidad">
-                    {{ especialidad }}
-                </option>
-            </select>
-        </div>
-
         <!-- Dropdown para seleccionar especialista -->
-        <div *ngIf="especialistasFiltrados.length > 0">
-            <label for="especialista"><strong>Seleccionar Especialista:</strong></label>
-            <select id="especialista" [(ngModel)]="selectedEspecialista" (ngModelChange)="obtenerTurnosDisponibles()">
-                <option *ngFor="let especialista of especialistasFiltrados" [value]="especialista.email">
-                    {{ especialista.nombre }} {{ especialista.apellido }}
-                </option>
-            </select>
+        <!-- Botones para seleccionar especialista -->
+        <label *ngIf="this.usuario.tipo == 'admin' && this.selectedPaciente"><strong>Seleccionar Especialista:</strong></label>
+        <div *ngIf="this.usuario.tipo == 'admin' && this.selectedPaciente" class="botones-especialistas" [@buttonExpand]>
+            <button *ngFor="let especialista of especialistas"
+                    (click)="seleccionarEspecialista(especialista)"
+                    [class.selected]="especialista === selectedEspecialista">
+                <img [src]="especialista.foto1" alt="{{ especialista.nombre }}" class="imagen-especialista">
+                <span>{{ especialista.nombre }} {{ especialista.apellido }}</span>
+            </button>
         </div>
 
-        <!-- Dropdown para seleccionar turno (solo si hay turnos disponibles) -->
-        <div *ngIf="turnosDisponibles.length > 0; else noTurnosDisponibles">
-            <label for="turno"><strong>Seleccionar Turno:</strong></label>
-            <select id="turno" [(ngModel)]="selectedTurno">
-                <option *ngFor="let turno of turnosDisponibles" [value]="turno">
-                    {{ turno }}
-                </option>
-            </select>
+        <label *ngIf="this.usuario.tipo != 'admin'"><strong>Seleccionar Especialista:</strong></label>
+        <div *ngIf="this.usuario.tipo != 'admin'" class="botones-especialistas" [@buttonExpand]>
+            <button *ngFor="let especialista of especialistas"
+                    (click)="seleccionarEspecialista(especialista)"
+                    [class.selected]="especialista === selectedEspecialista">
+                <img [src]="especialista.foto1" alt="{{ especialista.nombre }}" class="imagen-especialista">
+                <span>{{ especialista.nombre }} {{ especialista.apellido }}</span>
+            </button>
         </div>
-        
-        <!-- Mensaje en caso de no haber turnos disponibles -->
+
+        <label *ngIf="this.selectedEspecialista"><strong>Seleccionar Especialidad:</strong></label>
+        <div *ngIf="this.selectedEspecialista">
+            <div class="especialidades-container">
+                <div class="especialidad-boton-wrapper" *ngFor="let especialidad of especialidadesDisponibles" [@specialityExpand]>
+                    <span class="especialidad-nombre">{{ especialidad }}</span>
+                    <div
+                        class="especialidad-boton"
+                        (click)="selectedEspecialidad = especialidad; selectedTurno = ''; obtenerTurnosDisponibles()"
+                        [class.selected]="selectedEspecialidad === especialidad"
+                    >
+                        <img [src]="obtenerImagenEspecialidad(especialidad)" alt="Imagen de la especialidad" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="turnosDisponibles.length > 0; else noTurnosDisponibles">
+            <label  class="label-turno" *ngIf="turnosDisponibles.length > 0"><strong>Seleccionar Turno:</strong></label>
+            <div class="turnos-container" [@buttonExpand]>
+                <button
+                    class="turno-boton"
+                    *ngFor="let turno of turnosDisponibles"
+                    (click)="selectedTurno = turno"
+                    [class.selected]="selectedTurno === turno"
+                >
+                {{ formatearFecha(turno) }}
+                </button>
+            </div>
+        </div>
+
         <ng-template #noTurnosDisponibles>
-            <p class="no-turnos-message" *ngIf="this.selectedEspecialidad && this.selectedEspecialista">Lamentamos, no hay turnos disponibles en este momento.</p>
+            <p class="no-turnos-message" *ngIf="this.selectedEspecialidad && this.selectedEspecialista">Lo lamentamos, no hay turnos disponibles en este momento.</p>
         </ng-template>
 
-        <div *ngIf="selectedTurno">
+        <div *ngIf="selectedTurno" [@buttonExpand]>
             <button (click)="guardarTurno()" class="guardar-turno-btn">
                 Guardar Turno
             </button>
