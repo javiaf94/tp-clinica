@@ -29,31 +29,51 @@ Aquí podrá ver información sobre nuestra clínica. Podrá comenzar el proceso
 
 ##  Modulo Usuarios
 
-Este modulo solo es accessible para el administrador. Aquí podrá ver el listado de usuarios de cada tipo, aprobar o desactivar usuarios de tipo especialistao, y también crear nuevos usuarios de cualquier tipo.
+Este modulo solo es accessible para el administrador. Aquí podrá ver el listado de usuarios de cada tipo, aprobar o desactivar usuarios de tipo especialistao, y también crear nuevos usuarios de cualquier tipo. También tendrá acceso a ver las historias clinicas de todos los pacientes de la clínica.
 
 ![admin](https://github.com/user-attachments/assets/9dec5b69-a9df-4b7f-a6ba-bda5583fcfe8)
 
 ![admin](https://github.com/user-attachments/assets/534aadbc-50e3-4740-bfa0-cb1d65e61ca8)
+
+![maxresdefault](https://github.com/user-attachments/assets/1e64e23f-dbd2-4300-972c-f0b295de7780)
+
+
+## Mi Perfil
+
+Aquí podrás ver tu información cargada durante el registro. Los especialistas podrán además indicar la duración de sus turnos, y la franja horaria en la que atienden. Los usuarios podrán visualizar y descargar un PDF con su historial clínico.
+
+![admin](https://github.com/user-attachments/assets/242a0b89-e9d4-4e0f-8b63-71941117343b)
+
+![maxresdefault](https://github.com/user-attachments/assets/817e54f0-9bec-4757-b432-43f94b807578)
 
 
 ## Solicitar Turnos
 
 En esta sección, tanto los pacientes como administradores podrán solicitar un turno. Un administrador deberá seleccionar a que paciente se le asignará el turno.
 
-![admin](https://github.com/user-attachments/assets/6a952a82-ba49-43bc-a6db-17483153ffcc)
-
-## Mi Perfil
-
-Aquí podrás ver tu información cargada durante el registro. Los especialistas podrán además indicar la duración de sus turnos, y la franja horaria en la que atienden.
-
-![admin](https://github.com/user-attachments/assets/242a0b89-e9d4-4e0f-8b63-71941117343b)
+![maxresdefault](https://github.com/user-attachments/assets/77ef690c-64d3-4aea-99dc-b40a62366984)
 
 
 ## Mis Turnos
 
-Aquí podrá visualizar su historial de turnos. Los Pacientes podrán cancelar el turno y dejar un comentario sobre la atención del especialista, mientras que el especialista podrá aceptar, cancelar, rechazar, y finalizar el turno ingresando el diagnóstico correspondiente.
+Aquí podrá visualizar su historial de turnos. Los Pacientes podrán cancelar el turno y dejar un comentario sobre la atención del especialista así como ver su historia clinica y diagnóstico, mientras que el especialista podrá aceptar, cancelar, rechazar, y finalizar el turno ingresando el diagnóstico e história clínica correspondientes.
 
 ![admin](https://github.com/user-attachments/assets/2578bdfe-c43d-43af-bd4a-020e65f3f1a2)
+
+## Turnos
+
+Aquí solo el administrador podrá ver todos los turnos de la clínica, y podrá cancelar turnos que no hayan sido ni aceptados ni rechazados
+
+![maxresdefault](https://github.com/user-attachments/assets/449fce6e-f9cc-4d75-9aa6-bcf512be7d50)
+
+
+## Pacientes
+
+Aquí el especialista podrá visualizar todas las historias clínicas de pacientes a los que haya atendido al menos una vez.
+
+![image](https://github.com/user-attachments/assets/7fc7a477-f064-4166-8b35-b07a132ba963)
+
+
 
 
 
