@@ -1,0 +1,232 @@
+/* Contenedor principal */
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;  /* Mantener alineación más natural */
+    height: 150vh;
+    width: 100vw;
+    background-color: #e7e6e6;
+    background-image: url('../../../../public/background.jpg');
+    background-size: 100%;
+    background-position: top;
+    background-repeat:no-repeat;
+    padding: 20px;
+}
+
+/* Sección del perfil */
+.perfil-section {
+    background-color: #f7f9fc;
+    padding: 25px 35px;
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    width: 85%;
+    min-width: 85%;
+    min-height: 700px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Títulos y textos */
+.perfil-section h1 {
+    font-size: 2em;  /* Reducido el tamaño del título */
+    color: #4a4a4a;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.perfil-card h2 {
+    font-size: 1.5em;  /* Reducido el tamaño del título */
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.perfil-card p {
+    font-size: 1em;  /* Reducido el tamaño de los párrafos */
+    color: #555;
+    margin: 5px 0;
+}
+
+.perfil-card strong {
+    color: #2c3e50;
+}
+
+/* Contenedor de fotos */
+.tabs-container {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  
+  /* Estilo de las tabs */
+.tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .tabs button.active-tab {
+    background-color: #3262ff; /* Color para el botón activo */
+    color: #fff; /* Color del texto del botón activo */
+  }
+
+  .tabs button {
+    background-color: #6d8efa;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #fcfcfc;
+    border-radius: 4px;
+    margin: 0 5px;
+    font-size: 15px;
+    transition: background-color 0.3s;
+  }
+  
+  .tabs button.active,
+  .tabs button:hover {
+    background-color: #3262ff;
+    color: #fff;
+  }
+
+
+
+  .logs-container {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    max-width: 800px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .logs-container h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  table th,
+  table td {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  table th {
+    background-color: #3467b4;
+    color: white;
+  }
+  
+  table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  table tr:hover {
+    background-color: #ddd;
+  }
+
+
+  .chart-container {
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background: #f7f9fc;
+
+    height: 750px;
+    width: 550px;
+  }
+  
+  canvas {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .buttons-container {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  .buttons-container button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+  }
+  
+  .buttons-container button:hover {
+    background-color: #45a049;
+  }
+  
+  .chart-small {
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background: #f7f9fc;
+
+    height: 550px;
+    width: 1050px;
+  }
+
+  .date-picker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px 0;
+  }
+  
+  .date-picker label {
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  .date-picker input[type="date"] {
+    padding: 5px 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  .date-picker input[type="date"]:focus {
+    border-color: #007bff;
+  }
+  
+  .date-picker button {
+    padding: 8px 15px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    min-width: 150px;
+  }
+  
+  .date-picker button:hover {
+    background-color: #0056b3;
+  }
+  
+  .date-picker button:active {
+    background-color: #00408d;
+    transform: scale(0.98);
+  }
+  

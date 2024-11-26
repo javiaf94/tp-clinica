@@ -1,8 +1,10 @@
 /* Aplica estilo general al header */
 nav a.active-route {
-    font-weight: bold;
-  }
-  
+  background-color: #007bff; /* Fondo azul para el enlace activo */
+  color: white; /* Color blanco para el texto activo */
+  font-weight: bold; /* Negrita en el texto del enlace activo */
+}
+
   header {
     /*background-color: #ffffff; /* Blanco o cualquier color suave */
     padding: 0 30px; /* Margen horizontal */

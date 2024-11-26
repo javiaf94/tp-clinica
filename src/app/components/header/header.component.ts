@@ -4,11 +4,12 @@ import { map } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Firestore, getDocs, collection, query, where } from '@angular/fire/firestore';
+import { AnimarEnlacesDirective } from '../../directives/animar-enlaces.directive';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, CommonModule],
+  imports: [RouterLink, RouterLinkActive, CommonModule, AnimarEnlacesDirective],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })

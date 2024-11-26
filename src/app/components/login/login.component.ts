@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
-import { Firestore, collection, query, where, getDocs} from '@angular/fire/firestore';
+import { Firestore, collection, query, where, getDocs, addDoc } from '@angular/fire/firestore';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { IonicModule } from '@ionic/angular';
 import { IonIcon, IonFab, IonFabButton, IonFabList } from '@ionic/angular/standalone';
@@ -12,17 +12,18 @@ import { person, personCircle } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TooltipHoverDirective } from '../../directives/tooltip-hover.directive';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SpinnerComponent, IonicModule], // IonIcon, IonFab, IonFabButton, IonFabList],
+  imports: [CommonModule, ReactiveFormsModule, SpinnerComponent, IonicModule, TooltipHoverDirective], // IonIcon, IonFab, IonFabButton, IonFabList],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   animations: [
     trigger('slideInFromTop', [
       transition(':enter', [
-        style({ transform: 'translateY(-100%)', opacity: 0 }),
+        style({ transform: 'translateY(100%)', opacity: 0 }),
         animate('0.5s ease-out', style({ transform: 'translateY(0)', opacity: 1 }))
       ])
     ])
@@ -70,82 +71,79 @@ export class LoginComponent {
     });
   }
 
-  async onLogin()
-  {
+  async onLogin() {
     this.loading = true;
-    try
-    {
+    try {
       let user = await this.auth.login(this.form.get('email')?.value, this.form.get('contraseña')?.value);
-
+  
       const col = collection(this.firestore, 'usuarios'); // Colección de usuarios
       const q = query(col, where('email', '==', user.email)); // Consulta
       const querySnapshot = await getDocs(q);
-      const userData:any[]  = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    
+      const userData: any[] = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  
       this.auth.mailUsuario = userData[0].email;
       this.auth.tipoUsuario = userData[0].tipo;
       this.auth.nombreUsuario = userData[0].nombre;
-      
+  
       const estado = userData[0].estado;
-      
-      switch(this.auth.tipoUsuario)
-      {
+  
+      // Agregar log de ingreso a la colección "logs"
+      const logsCol = collection(this.firestore, 'logs'); // Colección de logs
+      await addDoc(logsCol, {
+        email: user.email,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone, // Obtener la zona horaria del navegador
+        timestamp: new Date().toISOString() // Fecha y hora en formato ISO
+      });
+  
+      // Navegación según tipo de usuario
+      switch (this.auth.tipoUsuario) {
         case 'paciente':
           this.router.navigate(['perfil']);
           break;
-        
+  
         case 'admin':
           this.router.navigate(['usuarios']);
           break;
-
-
+  
         case 'especialista':
-          if(estado != 'aprobado')
-          {
+          if (estado != 'aprobado') {
             this.auth.logout();
-            throw new Error("Su usuario debe ser aprobado por un administrador primero")
-          }
-          else
-          {
+            throw new Error("Su usuario debe ser aprobado por un administrador primero");
+          } else {
             this.router.navigate(['perfil']);
           }
           break;
-
-
+  
         default:
           this.router.navigate(['perfil']);
       }
       this.loading = false;
+    } catch (e) {
+      if (e instanceof Error) {
+        if (e.message == 'Firebase: Error (auth/invalid-credential).') {
+          Swal.fire({
+            title: 'Error!',
+            text: 'Usuario y/o contraseña incorrectos',
+            icon: 'error',
+            confirmButtonColor: '#4CAF50',
+            background: '#f2f2f2',
+            heightAuto: false
+          });
+          this.loading = false;
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: e.message,
+            icon: 'error',
+            confirmButtonColor: '#4CAF50',
+            background: '#f2f2f2',
+            heightAuto: false
+          });
+          this.loading = false;
+        }
+      }
     }
-    catch(e)
-    {
-      if (e instanceof Error) 
-        {
-          if(e.message == 'Firebase: Error (auth/invalid-credential).')
-          {
-            Swal.fire( { title: 'Error!',
-              text: 'Usuario y/o contraseña incorrectos',
-              icon: 'error',
-              confirmButtonColor: '#4CAF50',
-              background: '#f2f2f2',
-              heightAuto: false
-            }); 
-            this.loading = false;
-          }
-          else
-          {
-            Swal.fire( { title: 'Error!',
-              text: e.message,
-              icon: 'error',
-              confirmButtonColor: '#4CAF50',
-              background: '#f2f2f2',
-              heightAuto: false
-            }); 
-            this.loading = false;
-            }
-          }
-    }
- }
+  }
 
   goToRegister()
   {
@@ -158,6 +156,18 @@ export class LoginComponent {
     this.form.patchValue( {['email']: email, ['contraseña']: password});
   }
 
+  getTooltipMessage(usuario: any): string {
+    switch (usuario.imagen) {
+      case 'admin.png':
+        return 'Tipo de usuario: Administrador';
+      case 'doctor.png':
+        return 'Tipo de usuario: Especialista';
+      case 'paciente.png':
+        return 'Tipo de usuario: Paciente';
+      default:
+        return 'Seleccione un usuario para acceso rápido';
+    }
+  }
   
 }
 

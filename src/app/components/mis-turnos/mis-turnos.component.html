@@ -14,11 +14,11 @@
     <!-- Mostrar los turnos filtrados con animación de expansión gradual -->
     <div class="turnos-container">
       <ng-container *ngFor="let turno of turnosFiltradosPaciente">
-        <div class="turno-item" [@staggerExpand]>
+        <div class="turno-item" [@staggerExpand] [appTurnoEstadoColor]="turno.estado">
           <h2>Turno: {{turno.turno}}</h2>
-          <div>Especialista: {{turno.especialista}}</div>
+          <div>Especialista: {{turno.especialista | capitalizeFirstLetter}}</div>
           <div>Especialidad: {{turno.especialidad}}</div>
-          <div>Estado del turno: {{turno.estado}}</div>
+          <div>Estado del turno: {{turno.estado | capitalizeFirstLetter | estadoTurno}}</div>
           <div *ngIf="turno.estado == 'cancelado'">Motivo: {{turno.comentario_cancelacion}}</div>
           <div *ngIf="turno.estado == 'rechazado'">Motivo: {{turno.comentario_rechazo}}</div>
 
@@ -48,11 +48,11 @@
     <!-- Mostrar los turnos filtrados con animación de expansión gradual -->
     <div class="turnos-container">
       <ng-container *ngFor="let turno of turnosFiltradosEspecialista">
-        <div class="turno-item" [@staggerExpand]>
+        <div class="turno-item" [@staggerExpand] [appTurnoEstadoColor]="turno.estado">
           <h2>Turno: {{turno.turno}}</h2>
           <div>Paciente: {{turno.paciente}}</div>
           <div>Especialidad: {{turno.especialidad}}</div>
-          <div>Estado del turno: {{turno.estado}}</div>
+          <div>Estado del turno: {{turno.estado | capitalizeFirstLetter | estadoTurno}}</div>
           <div *ngIf="turno.estado == 'cancelado'">Motivo: {{turno.comentario_cancelacion}}</div>
           <div *ngIf="turno.estado == 'rechazado'">Motivo: {{turno.comentario_rechazo}}</div>
 

@@ -12,6 +12,7 @@ import { MisTurnosComponent } from './components/mis-turnos/mis-turnos.component
 import { TurnosComponent } from './components/turnos/turnos.component';
 import { PacientesComponent } from './components/pacientes/pacientes.component';
 import { HistoriaComponent } from './components/usuarios/historia/historia.component';
+import { EstadisticasComponent } from './components/estadisticas/estadisticas.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/bienvenida', pathMatch: "full" },
@@ -25,7 +26,7 @@ export const routes: Routes = [
     { path: 'turnos', component: TurnosComponent},
     { path: 'pacientes', component: PacientesComponent},
     { path: 'historia', component: HistoriaComponent},
-
+    { path: 'estadisticas', component: EstadisticasComponent},
     { path: '**', redirectTo: '/bienvenida', pathMatch: "full"},
 
 ];

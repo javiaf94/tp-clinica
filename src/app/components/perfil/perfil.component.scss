@@ -2,14 +2,15 @@
 .wrapper {
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 92.3vh;
+    align-items: flex-start;  /* Mantener alineación más natural */
+    height: 150vh;
     width: 100vw;
-    background-color: #292952;
+    background-color: #e7e6e6;
     background-image: url('../../../../public/background.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background-size: 100%;
+    background-position: top;
+    background-repeat:no-repeat;
+    padding: 20px;
 }
 
 /* Sección del perfil */

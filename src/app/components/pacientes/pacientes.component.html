@@ -1,29 +1,26 @@
 <div class="wrapper" >
   <div class="perfil-section" [@slideIn]>
-      <h1> Historias Clínicas de pacientes </h1>
+      <h1> Pacientes </h1>
       <ng-container>
-          <div class="historias-clinicas">
-              <div *ngIf="historiasClinicas.length > 0; else noHistorial">
-                  <div class="historias-container" [@turnoExpand]>
-                      <div *ngFor="let historia of historiasClinicas" class="historia-card">
-                          <h4>Turno: {{ historia.turno.split(',')[0] }}</h4>
-                          <p><strong>Especialidad:</strong> {{ historia.especialidad }}</p>
-                          <p><strong>Paciente:</strong> {{ historia.paciente }}</p>
-                          <p><strong>Altura:</strong> {{ historia.datosPrincipales[0] }}</p>
-                          <p><strong>Peso:</strong> {{ historia.datosPrincipales[1] }}</p>
-                          <p><strong>Temperatura:</strong> {{ historia.datosPrincipales[2] }}</p>
-                          <p><strong>Presión:</strong> {{ historia.datosPrincipales[3] }}</p>
-                          <div *ngIf="historia.datosDinamicos">
-                              <div *ngFor="let item of historia.datosDinamicos | keyvalue">
-                                  <p><strong>{{ item.key }}:</strong> {{ item.value }}</p>
-                              </div>
-                          </div>
-                      </div>
+        <div class="historias-clinicas">
+            <div *ngIf="historiasClinicasAgrupadas && historiasClinicasAgrupadas.length > 0; else noHistorial">
+              <div class="historias-container" [@turnoExpand]>
+                <div *ngFor="let grupo of historiasClinicasAgrupadas">
+                  <!-- Muestra el nombre del paciente una sola vez -->
+                  <img [src]="grupo.imagen" alt="{{ grupo.paciente }}" class="paciente-imagen" *ngIf="grupo.imagen">
+                  <h3>{{ grupo.paciente | capitalizeFirstLetter }}</h3>
+                  <div *ngFor="let historia of grupo.turnos.slice(0, 3)" class="historia-card">
+                    <h4>Turno: {{ historia.turno.split(',')[0] }}</h4>
+                    <p><strong>Especialidad:</strong> {{ historia.especialidad }}</p>     
+                    <p><strong>Diagnóstico:</strong> {{ historia.resena }}</p> 
+                    <button *ngIf="historia.datosPrincipales" (click)="verHistoriaClinica(historia)">Ver Historia Clinica</button>               
                   </div>
+                </div>
               </div>
-              <ng-template #noHistorial>
-                  <p>No tienes historias clínicas registradas.</p>
-              </ng-template>
+            </div>
+            <ng-template #noHistorial>
+              <p>No tienes historias clínicas registradas.</p>
+            </ng-template>
           </div>
       </ng-container>
   </div>

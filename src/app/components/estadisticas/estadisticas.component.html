@@ -1,0 +1,85 @@
+<div class="wrapper" >
+    <div class="perfil-section" [@slideIn]>
+        <h1> Estadísticas </h1>
+
+        <div class="tabs-container">
+            <!-- Navegación de Tabs -->
+            <div class="tabs">
+              <button (click)="onTabChange('logs')" [ngClass]="{'active-tab': activeTab === 'logs'}">Logs</button>
+              <button (click)="onTabChange('turnos-especialidad')" [ngClass]="{'active-tab': activeTab === 'turnos-especialidad'}">Turnos/Especialidad</button>
+              <button (click)="onTabChange('turnos-dia')" [ngClass]="{'active-tab': activeTab === 'turnos-dia'}">Turnos/Día</button>
+              <button (click)="onTabChange('turnos-especialista')" [ngClass]="{'active-tab': activeTab === 'turnos-especialista'}">Turnos/Especialista</button>
+              <button (click)="onTabChange('finalizados-especialista')" [ngClass]="{'active-tab': activeTab === 'finalizados-especialista'}">Turnos Finalizados/Especialista</button>
+
+              <!-- <button (click)="activeTab = 'historia'" [ngClass]="{'active-tab': activeTab === 'historia'}">Historia Clínica Usuarios</button> -->
+            </div>            
+    </div>
+
+    <div class="tab-content" >
+      
+        <!-- Logs -->
+        <div class="chart-small" *ngIf="activeTab === 'logs'" [@slideInFromTop]>
+          <!-- Gráfico de barras -->
+          <canvas id="logsChart"></canvas>
+        
+          <!-- Botones de descarga -->
+          <div class="buttons-container">
+            <button (click)="downloadPDFLogs()">Descargar Gráfico PDF</button>
+            <button (click)="downloadLogsExcel()">Descargar Logs Excel</button>
+          </div>
+        </div>
+
+      <!-- turnos Especialidad -->
+      <div  class="chart-container" *ngIf="activeTab === 'turnos-especialidad'" [@slideInFromTop]>
+        <canvas id="turnosEspecialidadChart"></canvas>
+        <div class="buttons-container">
+            <button (click)="downloadPDF()">Descargar Gráfico PDF</button>
+            <button (click)="downloadExcel()">Descargar Informe Excel</button>
+          </div>
+      </div>
+
+      <!-- turnos Dia -->
+
+      <div   class="chart-small" *ngIf="activeTab === 'turnos-dia'" [@slideInFromTop]>
+        <canvas id="turnosDiaChart"></canvas>
+        <div class="buttons-container">
+          <button (click)="downloadPDFDia()">Descargar Gráfico PDF</button>
+          <button (click)="downloadExcelDia()">Descargar Informe Excel</button>
+        </div>
+      </div>
+
+      <!-- Turnos Especialista x dia -->
+      
+      <!-- Gráfico de torta -->
+      <div class="chart-container" *ngIf="activeTab === 'turnos-especialista'" [@slideInFromTop]>
+          <div class="date-picker">
+            <label for="startDate">Desde:</label>
+            <input id="startDate" type="date" [(ngModel)]="startDate">
+            <label for="endDate">Hasta:</label>
+            <input id="endDate" type="date" [(ngModel)]="endDate">
+            <button *ngIf="!this.isChartGenerated" (click)="loadTurnosPorEspecialista()">Generar gráfico</button>
+          </div>
+        <canvas id="turnosEspecialistaChart"></canvas>
+
+        <div class="buttons-container" *ngIf="this.isChartGenerated">
+          <button (click)="downloadPDFespecialista()">Descargar Gráfico PDF</button>
+          <button (click)="downloadExcelespecialista()">Descargar Informe Excel</button>
+        </div>
+      </div>
+    
+      <div class="chart-container" *ngIf="activeTab === 'finalizados-especialista'" [@slideInFromTop]>
+        <div class="date-picker">
+          <label for="startDate">Desde:</label>
+          <input id="startDate" type="date" [(ngModel)]="startDate">
+          <label for="endDate">Hasta:</label>
+          <input id="endDate" type="date" [(ngModel)]="endDate">
+          <button *ngIf="!isFinalizedChartGenerated" (click)="loadFinalizedTurnos()">Generar gráfico</button>
+        </div>
+        <canvas id="finalizedTurnosChart"></canvas>
+        <div class="buttons-container" *ngIf="isFinalizedChartGenerated">
+          <button (click)="downloadPDFFinalized()">Descargar Gráfico PDF</button>
+          <button (click)="downloadExcelFinalized()">Descargar Informe Excel</button>
+        </div>
+      </div>
+  </div>
+

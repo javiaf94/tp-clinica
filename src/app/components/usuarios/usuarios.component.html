@@ -7,9 +7,9 @@
     <div class="tabs-container">
       <!-- Navegación de Tabs -->
       <div class="tabs">
-        <button (click)="activeTab = 'alta'" [ngClass]="{'active-tab': activeTab === 'alta'}">Alta Usuarios</button>
-        <button (click)="activeTab = 'listado'" [ngClass]="{'active-tab': activeTab === 'listado'}">Listado Usuarios</button>
-        <button (click)="activeTab = 'historia'" [ngClass]="{'active-tab': activeTab === 'historia'}">Historia Clínica Usuarios</button>
+        <button (click)="activeTab = 'alta'" [ngClass]="{'active-tab': activeTab === 'alta'}">Alta</button>
+        <button (click)="activeTab = 'listado'" [ngClass]="{'active-tab': activeTab === 'listado'}">Listado</button>
+        <!-- <button (click)="activeTab = 'historia'" [ngClass]="{'active-tab': activeTab === 'historia'}">Historia Clínica Usuarios</button> -->
       </div>
 
       <!-- Contenido de cada Tab -->
@@ -23,13 +23,19 @@
       <div *ngIf="activeTab === 'listado'" [@slideInFromTop]>
         <div class="filter-container">
           <label for="userType">Filtrar por tipo de usuario:</label>
-          <select id="userType" [(ngModel)]="selectedUserType" (change)="filterUsers()" style="margin-left: 4px; font-size:medium;">
+          <select
+            id="userType"
+            [(ngModel)]="selectedUserType"
+            (change)="filterUsers()"
+            style="margin-left: 4px; font-size: medium;"
+          >
             <option value="admin">Administrador</option>
             <option value="especialista">Especialista</option>
             <option value="paciente">Paciente</option>
           </select>
+          <button class="excel-btn" (click)="downloadExcel()" style="margin-left: 10px;">Descargar Excel</button>
         </div>
-
+      
         <!-- Contenido de Listado Usuarios -->
         <div *ngIf="usuarios.length > 0">
           <table>
@@ -39,43 +45,67 @@
                 <th>DNI</th>
                 <th>Edad</th>
                 <th>Email</th>
-                <th>Imagen</th>
-                <ng-container *ngIf="selectedUserType=='especialista'">
+                <th *ngIf="this.selectedUserType=='admin'">Imagen</th>
+                <ng-container *ngIf="selectedUserType == 'especialista'">
                   <th>Activo</th>
                 </ng-container>
-                <ng-container *ngIf="selectedUserType=='paciente'">
+                <ng-container *ngIf="selectedUserType == 'paciente'">
                   <th>Obra Social</th>
+                  <th>Historias Clinicas</th>
+
                 </ng-container>
-                <!-- Agrega más columnas si necesitas -->
+                <ng-container *ngIf="selectedUserType == 'paciente' || selectedUserType == 'especialista'">
+                  <th> Descargar Turnos</th>
+                </ng-container>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let usuario of usuariosFiltrados">
                 <td>{{ usuario.nombre }} {{ usuario.apellido }}</td>
                 <td>{{ usuario.dni }}</td>
-                <td>{{ usuario.edad }}</td>
+                <td>{{ usuario.edad  | edad}}</td>
                 <td>{{ usuario.email }}</td>
-                <td><img src="{{usuario.foto1}}" style="width:20px;height:20px"></td>
-
-                <ng-container *ngIf="selectedUserType=='especialista'">
-                  <input class="checkboxActivo" type="checkbox" [checked]="usuario.estado === 'aprobado'" (change)="toggleEstado(usuario, $event)">
+                <td *ngIf="this.selectedUserType=='admin'"><img [src]="usuario.foto1" alt="{{ usuario.nombre }}" style="width: 20px; height: 20px;" /></td>
+      
+                <ng-container *ngIf="selectedUserType == 'especialista'">
+                  <td>
+                    <input
+                      class="checkboxActivo"
+                      type="checkbox"
+                      [checked]="usuario.estado === 'aprobado'"
+                      (change)="toggleEstado(usuario, $event)"
+                    />
+                  </td>
                 </ng-container>
-
-                <ng-container *ngIf="selectedUserType=='paciente'">
+                <ng-container *ngIf="selectedUserType == 'paciente' ">
                   <td>{{ usuario.obrasocial }}</td>
+                  <td><button class="excel-btn" (click)="mostrarHistoriasClinicas(usuario)">Ver</button></td>
+
                 </ng-container>
-                <!-- Agrega más celdas si necesitas -->
+                <ng-container *ngIf="selectedUserType == 'paciente' || selectedUserType=='especialista'">
+                  <td>
+                    <!-- FAB para paciente -->
+                    <div class="fab-container">
+                      <div class="fab" (click)="descargarTurnos(usuario)">
+                        <img [src]="usuario.foto1" alt="{{ usuario.nombre }}" class="fab-img" />
+                        <span class="fab-name">{{ usuario.nombre }}</span>
+                      </div>
+                    </div>
+                  </td>
+                </ng-container>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
-
-      <!-- Nuevo contenido para la pestaña de 'historia' -->
+      
+      
+<!-- 
+      Nuevo contenido para la pestaña de 'historia'
       <div *ngIf="activeTab === 'historia'" [@slideInFromTop]>
-        <!-- Contenido de Historia Clínica Usuarios -->
+        Contenido de Historia Clínica Usuarios
         <app-historia></app-historia>
-      </div>
+      </div> -->
 
     </div>
   </div>

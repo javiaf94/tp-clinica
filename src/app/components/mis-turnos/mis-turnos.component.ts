@@ -6,11 +6,14 @@ import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TurnoEstadoColorDirective } from '../../directives/turno-estado-color.directive';
+import { CapitalizeFirstLetterPipe } from '../../pipes/capitalize-nombres';
+import { EstadoTurnoPipe } from '../../pipes/estado-turno.pipe';
 
 @Component({
   selector: 'app-mis-turnos',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, TurnoEstadoColorDirective, CapitalizeFirstLetterPipe, EstadoTurnoPipe],
   templateUrl: './mis-turnos.component.html',
   styleUrl: './mis-turnos.component.scss',
 
@@ -86,7 +89,47 @@ export class MisTurnosComponent {
           );
         });
       }
+      this.ordenarTurnosDesc();
+
     }
+
+    ordenarTurnosDesc() {
+      this.turnosFiltradosPaciente.sort((a: any, b: any) => {
+        // Convertir las fechas de los turnos a objetos Date
+        const fechaA = this.convertirADate(a.turno);
+        const fechaB = this.convertirADate(b.turno);
+    
+        if (fechaA > fechaB) {
+          return -1;
+        } else if (fechaA < fechaB) {
+          return 1;
+        }
+        return 0;
+      });
+    
+      this.turnosFiltradosEspecialista.sort((a: any, b: any) => {
+        // Convertir las fechas de los turnos a objetos Date
+        const fechaA = this.convertirADate(a.turno);
+        const fechaB = this.convertirADate(b.turno);
+    
+        if (fechaA > fechaB) {
+          return -1;
+        } else if (fechaA < fechaB) {
+          return 1;
+        }
+        return 0;
+      });
+    }
+    
+    // Función para convertir la cadena del turno en un objeto Date
+    convertirADate(turno: string): Date {
+      // Extraer la fecha de la cadena (ignorando las horas)
+      const fechaStr = turno.split(',')[0];  // "10/12/2024" de "10/12/2024, 15:00 - 15:45"
+      const [dia, mes, anio] = fechaStr.split('/').map(num => parseInt(num, 10));
+      // Crear un objeto Date a partir de la fecha
+      return new Date(anio, mes - 1, dia); // Mes es 0-indexado, por eso restamos 1
+    }
+
 
     filtrarTurnosEspecialista() {
       if (!this.filtro) {
@@ -107,6 +150,8 @@ export class MisTurnosComponent {
           );
         });
       }
+      this.ordenarTurnosDesc();
+
     }
 
 
@@ -154,6 +199,7 @@ export class MisTurnosComponent {
 
         this.turnosFiltradosPaciente = [...this.turnosPaciente];
         this.turnosFiltradosEspecialista = [...this.turnosEspecialista];
+        this.ordenarTurnosDesc();
 
       }
     });

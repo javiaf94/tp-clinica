@@ -6,12 +6,15 @@ import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TurnoEstadoColorDirective } from '../../directives/turno-estado-color.directive';
+import { CapitalizeFirstLetterPipe } from '../../pipes/capitalize-nombres';
+import { EstadoTurnoPipe } from '../../pipes/estado-turno.pipe';
 
 
 @Component({
   selector: 'app-turnos',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, TurnoEstadoColorDirective, CapitalizeFirstLetterPipe, EstadoTurnoPipe],
   templateUrl: './turnos.component.html',
   styleUrl: './turnos.component.scss',
   animations: [
@@ -70,7 +73,7 @@ export class TurnosComponent {
       if (!this.filtro) {
         this.turnosFiltrados = [...this.turnos];
       } else {
-        this.turnosFiltrados = this.turnos.filter((turno: any) => {  
+        this.turnosFiltrados = this.turnos.filter((turno: any) => {
           const filtroLower = this.filtro.toLowerCase();
           return (
             turno.especialidad.toLowerCase().includes(filtroLower) ||
@@ -79,9 +82,22 @@ export class TurnosComponent {
           );
         });
       }
+    
+      // Llamar a la función de ordenamiento
+      this.ordenarTurnosDesc();
     }
 
-
+    ordenarTurnosDesc() {
+      this.turnosFiltrados.sort((a: any, b: any) => {
+        // Suponiendo que turno.turno es una cadena de texto o fecha
+        if (a.turno > b.turno) {
+          return -1;
+        } else if (a.turno < b.turno) {
+          return 1;
+        }
+        return 0;
+      });
+    }
 
 
   ngOnInit()
@@ -116,6 +132,7 @@ export class TurnosComponent {
         }
 
         this.turnosFiltrados = [...this.turnos];
+        this.ordenarTurnosDesc();
       }
     });
   }

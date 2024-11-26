@@ -8,11 +8,12 @@ import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { trigger, transition, style, animate, stagger } from '@angular/animations';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CapitalizeFirstLetterPipe } from '../../pipes/capitalize-nombres';
 
 @Component({
   selector: 'app-solicitar-turno',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, DatePipe],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, DatePipe, CapitalizeFirstLetterPipe],
   providers: [DatePipe],
   templateUrl: './solicitar-turno.component.html',
   styleUrls: ['./solicitar-turno.component.scss'],
@@ -290,6 +291,7 @@ export class SolicitarTurnoComponent {
         const emailPaciente = this.selectedPaciente ? this.selectedPaciente : this.usuario.email;
 
         const paciente = this.selectedPaciente ?  this.pacientes.find( (paciente:any) => paciente.email === this.selectedPaciente ).nombre + ' ' + this.pacientes.find( (paciente:any) => paciente.email === this.selectedPaciente ).apellido : (this.usuario.nombre + ' ' + this.usuario.apellido);
+        const imagenPaciente = this.selectedPaciente ?  this.pacientes.find( (paciente:any) => paciente.email === this.selectedPaciente ).foto1 : this.usuario.foto1;
 
         // const especialista = this.especialistasFiltrados.find(
         //   (especialista) => especialista.email === this.selectedEspecialista
@@ -304,7 +306,8 @@ export class SolicitarTurnoComponent {
           especialista: especialista.nombre + ' ' + especialista.apellido,
           turno: this.selectedTurno,
           especialidad: this.selectedEspecialidad,
-          estado: 'pendiente'
+          estado: 'pendiente',
+          imagenPaciente: imagenPaciente
         });
               
        const msjUsuario =  !this.selectedPaciente ? ' Podrá ver su turno desde la sección mis turnos.' : '';

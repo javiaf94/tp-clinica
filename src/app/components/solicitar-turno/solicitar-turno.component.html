@@ -6,7 +6,7 @@
             <label for="paciente"><strong>Seleccionar Paciente:</strong></label>
             <select id="paciente" [(ngModel)]="selectedPaciente" (ngModelChange)="seleccionarPaciente()">
                 <option *ngFor="let paciente of pacientes" [value]="paciente.email">
-                    {{ paciente.nombre }} {{ paciente.apellido }}
+                    {{ paciente.nombre | capitalizeFirstLetter}} {{ paciente.apellido | capitalizeFirstLetter}}
                 </option>
             </select>
         </div>
@@ -19,7 +19,7 @@
                     (click)="seleccionarEspecialista(especialista)"
                     [class.selected]="especialista === selectedEspecialista">
                 <img [src]="especialista.foto1" alt="{{ especialista.nombre }}" class="imagen-especialista">
-                <span>{{ especialista.nombre }} {{ especialista.apellido }}</span>
+                <span>{{ especialista.nombre | capitalizeFirstLetter }} {{ especialista.apellido | capitalizeFirstLetter}}</span>
             </button>
         </div>
 
@@ -29,7 +29,7 @@
                     (click)="seleccionarEspecialista(especialista)"
                     [class.selected]="especialista === selectedEspecialista">
                 <img [src]="especialista.foto1" alt="{{ especialista.nombre }}" class="imagen-especialista">
-                <span>{{ especialista.nombre }} {{ especialista.apellido }}</span>
+                <span>{{ especialista.nombre | capitalizeFirstLetter}} {{ especialista.apellido | capitalizeFirstLetter }}</span>
             </button>
         </div>
 

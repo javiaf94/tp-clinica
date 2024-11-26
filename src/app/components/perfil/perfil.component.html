@@ -11,9 +11,9 @@
       </div>
       <div class="perfil-container">
           <div class="perfil-card" [@expand]>
-              <h2>{{ usuario.nombre }} {{ usuario.apellido }}</h2>
+              <h2>{{ usuario.nombre | capitalizeFirstLetter}} {{ usuario.apellido | capitalizeFirstLetter }}</h2>
               <p><strong>DNI:</strong> {{ usuario.dni }}</p>
-              <p><strong>Edad:</strong> {{ usuario.edad }}</p>
+              <p><strong>Edad:</strong> {{ usuario.edad | edad }}</p>
               <p><strong>Email:</strong> {{ usuario.email }}</p>
               <p *ngIf="usuario.tipo =='paciente'"><strong>Obra Social:</strong> {{ usuario.obrasocial }}</p>
               <p *ngIf="usuario.tipo =='especialista'"><strong>Especialidades:</strong> {{ usuario.especialidades }}</p>
@@ -21,25 +21,37 @@
               <ng-container *ngIf="usuario.tipo == 'paciente'">
                   <div class="historias-clinicas" [@fadeIn]>
                       <h3>Mis Historias Clínicas</h3>
-                      <button (click)="downloadPDF()">Descargar</button>
-                      <div *ngIf="historiasClinicas.length > 0; else noHistorial">
-                          <div class="historias-container" [@expand]>
-                              <div *ngFor="let historia of historiasClinicas">
-                                  <h4>Turno: {{ historia.turno.split(',')[0] }}</h4>
-                                  <p><strong>Especialidad:</strong> {{ historia.especialidad }}</p>
-                                  <p><strong>Especialista:</strong> {{ historia.especialista }}</p>
-                                  <p><strong>Altura:</strong> {{ historia.datosPrincipales[0] }}</p>
-                                  <p><strong>Peso:</strong> {{ historia.datosPrincipales[1] }}</p>
-                                  <p><strong>Temperatura:</strong> {{ historia.datosPrincipales[2] }}</p>
-                                  <p><strong>Presión:</strong> {{ historia.datosPrincipales[3] }}</p>
-                                  <div *ngIf="historia.datosDinamicos">
-                                      <div *ngFor="let item of historia.datosDinamicos | keyvalue">
-                                          <p><strong>{{ item.key }}:</strong> {{ item.value }}</p>
-                                      </div>
+                      
+
+                          <!-- Dropdown de Especialidades -->
+                        <div>
+                            <label for="especialidad-select">Filtrar por especialidad:</label>
+                            <select id="especialidad-select" [(ngModel)]="especialidadSeleccionada" (change)="filtrarHistorias()">
+                            <option value="">Todas las especialidades</option>
+                            <option *ngFor="let especialidad of especialidades" [value]="especialidad">{{ especialidad }}</option>
+                            </select>
+                            <button (click)="downloadPDF()" style="margin-left: 10px">Descargar</button>
+                        </div>
+  
+                        <div *ngIf="historiasFiltradas.length > 0; else noHistorial" style="margin-top: 10px">
+                            <div class="historias-container">
+                              <div *ngFor="let historia of historiasFiltradas">
+                                <h4>Turno: {{ historia.turno.split(',')[0] }}</h4>
+                                <p><strong>Especialidad:</strong> {{ historia.especialidad }}</p>
+                                <p><strong>Especialista:</strong> {{ historia.especialista }}</p>
+                                <p><strong>Altura:</strong> {{ historia.datosPrincipales[0] }}</p>
+                                <p><strong>Peso:</strong> {{ historia.datosPrincipales[1] }}</p>
+                                <p><strong>Temperatura:</strong> {{ historia.datosPrincipales[2] }}</p>
+                                <p><strong>Presión:</strong> {{ historia.datosPrincipales[3] }}</p>
+                                <div *ngIf="historia.datosDinamicos">
+                                  <div *ngFor="let item of historia.datosDinamicos | keyvalue">
+                                    <p><strong>{{ item.key }}:</strong> {{ item.value }}</p>
                                   </div>
+                                </div>
                               </div>
+                            </div>
                           </div>
-                      </div>
+
                       <ng-template #noHistorial>
                           <p>No tienes historias clínicas registradas.</p>
                       </ng-template>

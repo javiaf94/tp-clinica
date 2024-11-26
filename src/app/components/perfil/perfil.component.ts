@@ -7,12 +7,14 @@ import Swal from 'sweetalert2';
 import { jsPDF } from 'jspdf';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CapitalizeFirstLetterPipe } from '../../pipes/capitalize-nombres';
+import { EdadPipe } from '../../pipes/edad.pipe';
 
 
 @Component({
   selector: 'app-perfil',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, CapitalizeFirstLetterPipe, EdadPipe],
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.scss'],
   animations: [
@@ -23,6 +25,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
       ]),
       transition(':leave', [
         animate('0.3s', style({ opacity: 0 }))
+      ])
+    ]),
+    trigger('buttonExpand', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'scale(0.5)' }),
+        animate('300ms 100ms ease-out', style({ opacity: 1, transform: 'scale(1)' }))
       ])
     ]),
     trigger('slideIn', [
@@ -59,10 +67,13 @@ export class PerfilComponent {
   diasDeLaSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
 
   historiasClinicas: any[] = [];  // Lista de historias clínicas
-
+  especialidades: string[] = []; // Array de especialidades únicas
+  especialidadSeleccionada: string = ''; // Especialidad seleccionada
+  historiasFiltradas: any[] = []; // Historias clínicas filtradas
 
   constructor(private authService: AuthService, private firestore: Firestore) {}
 
+  
   ngOnInit() {
     this.authService.getUserEmail().subscribe(async (email) => {
       if (email) {
@@ -86,13 +97,31 @@ export class PerfilComponent {
             console.log('Usuario no encontrado');
           }
 
-          this.getHistoriasClinicas();  // Llamar a la función para cargar las historias clínicas
+          this.getHistoriasClinicas().then(() => {
+            this.cargarEspecialidades();
+            this.historiasFiltradas = [...this.historiasClinicas]; // Mostrar todas al inicio
+          });
 
         } catch (error) {
           console.error('Error al obtener el usuario:', error);
         }
       }
     });
+  }
+
+  cargarEspecialidades() {
+    const especialidadesSet = new Set(this.historiasClinicas.map(historia => historia.especialidad));
+    this.especialidades = Array.from(especialidadesSet);
+  }
+
+  filtrarHistorias() {
+    if (this.especialidadSeleccionada) {
+      this.historiasFiltradas = this.historiasClinicas.filter(
+        historia => historia.especialidad === this.especialidadSeleccionada
+      );
+    } else {
+      this.historiasFiltradas = [...this.historiasClinicas]; // Mostrar todas si no se selecciona ninguna especialidad
+    }
   }
 
   async getHistoriasClinicas() {
@@ -283,7 +312,7 @@ export class PerfilComponent {
     let yPosition = 90; // Iniciar después del título, fecha y paciente
   
     // Iterar sobre las historias clínicas
-    this.historiasClinicas.forEach((historia, index) => {
+    this.historiasFiltradas.forEach((historia, index) => {
       doc.setFontSize(12);
   
       // Imprimir cada campo en una línea separada

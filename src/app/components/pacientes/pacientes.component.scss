@@ -2,14 +2,15 @@
 .wrapper {
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 92.3vh;
+    align-items: flex-start;  /* Mantener alineación más natural */
+    height: 150vh;
     width: 100vw;
-    background-color: #292952;
+    background-color: #e7e6e6;
     background-image: url('../../../../public/background.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background-size: 100%;
+    background-position: top;
+    background-repeat:no-repeat;
+    padding: 20px;
 }
 
 /* Sección del perfil */
@@ -163,7 +164,6 @@ button:hover {
 }
 
 .historias-clinicas {
-    margin-top: 20px;
     width: 100%;
 }
 
@@ -203,3 +203,24 @@ button:hover {
     color: #2c3e50;
 }
 
+button {
+    padding: 10px 15px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 1em;
+    width: 100%;  /* Botones ocupan el ancho completo de la tarjeta */
+}
+
+button:hover {
+    background-color: #357ab7;
+}
+
+.paciente-imagen
+{
+    width: 150px;
+    height: 150px;
+}
